@@ -3,8 +3,9 @@
 import { JSX, useEffect, useState } from 'react';
 import { motion, useAnimate } from 'motion/react';
 import AppTooltip from '@/components/shared/Tooltip';
-import { MoveUpRight } from 'lucide-react';
 import ArrowUpRightIcon from '@/components/icons/ArrowUpIcon';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 type Props = {
   social: {
@@ -12,9 +13,10 @@ type Props = {
     url: string;
     icon: JSX.Element;
   };
+  className?: string;
 };
 
-export default function SocialButton({ social }: Props) {
+export default function SocialButton({ social, className }: Props) {
   const [isHovered, setIsHovered] = useState(false);
   const [scope, animate] = useAnimate();
 
@@ -75,8 +77,10 @@ export default function SocialButton({ social }: Props) {
 
   return (
     <AppTooltip text={social.name} delayDuration={200} position='top'>
-      <div
-        className='group relative flex size-8 items-center justify-center rounded-xl'
+      <Button
+        className={cn('group relative size-8 hover:!bg-transparent', className)}
+        size='icon'
+        variant='ghost'
         ref={scope}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -85,10 +89,9 @@ export default function SocialButton({ social }: Props) {
           href={social.url}
           target='_blank'
           rel='noopener noreferrer'
-          className='text-foreground hover:text-foreground/60 transition-colors'
           aria-label={`${social.name} profile`}
         >
-          <div className='size-5'>{social.icon}</div>
+          <div className='[&_svg]:!size-5'>{social.icon}</div>
         </a>
 
         <motion.a
@@ -101,7 +104,7 @@ export default function SocialButton({ social }: Props) {
         >
           <ArrowUpRightIcon className='text-primary-foreground size-4' />
         </motion.a>
-      </div>
+      </Button>
     </AppTooltip>
   );
 }
