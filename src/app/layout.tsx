@@ -27,7 +27,7 @@ export default function RootLayout({
       <body
         className={`${interFont.variable} ${geistMono.variable} dark antialiased`}
       >
-        <div className='mx-auto max-w-screen-md px-4 pt-12 pb-10'>
+        <div className='mx-auto max-w-screen-md px-4 pt-6 pb-10'>
           <Header />
           <div className='mt-10'>{children}</div>
         </div>
