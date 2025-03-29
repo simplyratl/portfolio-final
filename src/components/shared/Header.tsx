@@ -15,7 +15,7 @@ export default function Header() {
   return (
     <header className='relative flex h-14 place-items-center justify-between'>
       <Link href='/'>
-        <Logo className='size-9' />
+        <Logo className='size-8' />
       </Link>
 
       {/* Mobile menu button */}
@@ -33,7 +33,7 @@ export default function Header() {
           {navLinks.map((link) => (
             <Link
               href={link.href}
-              className='hover:bg-secondary text-muted/80 flex h-8 items-center rounded-lg px-4 transition-colors hover:text-black dark:hover:text-white'
+              className='hover:bg-secondary text-muted/80 flex h-8 items-center rounded-lg px-4 text-sm transition-colors duration-150 hover:text-black dark:hover:text-white'
               key={link.label}
             >
               {link.label}
