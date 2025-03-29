@@ -111,7 +111,7 @@ function MarkdownVideo({ src, className }: BlogVideoProps) {
         }}
         transition={{ duration: 0.16 }}
         className={cn(
-          'absolute right-3 bottom-3 left-3 rounded-full bg-black/40 px-4 pt-4 pb-2 backdrop-blur-sm'
+          'bg-background/70 absolute right-3 bottom-3 left-3 rounded-full px-4 pt-4 pb-2 saturate-200 backdrop-blur-sm'
         )}
       >
         <VideoProgressBar
@@ -124,10 +124,13 @@ function MarkdownVideo({ src, className }: BlogVideoProps) {
       </motion.div>
 
       <motion.div
-        className='absolute top-4 right-4'
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: !isHovering ? 1 : 0, scale: !isHovering ? 1 : 0.8 }}
-        exit={{ opacity: 0, scale: 0.8 }}
+        className='absolute bottom-2 left-3'
+        animate={{
+          scale: !isHovering ? 1 : 0.8,
+          opacity: !isHovering ? 1 : 0,
+          y: 0,
+          x: !isHovering ? 0 : 4,
+        }}
         transition={{ duration: 0.16 }}
       >
         <CircularProgress
