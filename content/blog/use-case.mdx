@@ -1,0 +1,140 @@
+---
+title: The Use Case
+description: At the end, everything in software development is the use case.
+date: 2024-10-19
+---
+
+Picture this: You're sitting in a meeting room, and someone proudly declares, "We should use GraphQL because Netflix uses it!" *Cue the awkward silence.*
+
+Let's talk about what use cases really mean in software engineering, and no, it's not about following the tech trends like they're fashion statements.
+
+## The Real Deal About Use Cases
+
+Picking the wrong tech stack is like bringing a high-powered telescope to a reading room—it’s overkill for the situation and doesn’t solve the actual problem.
+
+
+### What Actually Is a Use Case?
+It's not just a buzzword to throw around in meetings to sound smart. A use case is about understanding:
+- What problem are you actually solving?
+- Who are you solving it for?
+- What constraints are you working with?
+- What resources (team, time, money) do you have?
+
+## The Database Dilemma: A Real Story
+
+Let me tell you about a startup I worked with. They were building a financial application and chose MongoDB because:
+- "It's what cool startups use"
+- "It's faster to develop with"
+- "SQL is so 2010"
+
+Three months later, they were wrestling with data consistency issues that would make a wrestler tap out. Why? Because they ignored the use case:
+- They needed ACID transactions
+- They had strongly structured data
+- They required complex joins
+
+PostgreSQL would have been the boring but right choice. Sometimes boring is beautiful!
+
+## The Framework Frenzy
+
+"But React has more GitHub stars!" Sure, and I have a pet rock with a Twitter following, but that doesn't make it the right choice for your project.
+
+Let's break down real use cases:
+
+### When Vue.js Might Be Your Jam
+- Your team is new to frontend frameworks
+- You need a gentle learning curve
+- You're building something that needs to be up yesterday
+- Your app's complexity is moderate
+
+### When React Makes Sense
+- You need a rich ecosystem of specialized packages
+- Your team already knows it well
+- You're building a complex, state-heavy application
+- You need to share components across multiple platforms
+
+## The Bootstrap vs Tailwind Saga
+
+Here's a real story that hits home. A developer (let's call him Bob) wanted to switch from Bootstrap to Tailwind in an enterprise application because "it's more modern." But he forgot to consider:
+- 15 developers who knew Bootstrap inside out
+- 300,000 lines of existing Bootstrap code
+- Tight deadlines for new features
+
+The use case didn't support the switch, no matter how "cool" Tailwind might be.
+
+**While on the other hand**, I had an experience where Tailwind was the perfect choice. Why?
+Because in the company the similar technology that was probably based on Tailwind was already in use.
+The team was already familiar with the technology and the learning curve was minimal.
+
+After people switched to Tailwind, the productivity skyrocketed and the codebase became more consistent and maintainable.
+Everyone like it because Tailwind was easier to use, classes were more readable and it has a lot of utility classes, plus arbitrary values.
+
+For instance:
+
+```html
+<!-- Tailwind -->
+<div class="flex justify-center items-center">
+  This is a card
+</div>
+```
+
+```html
+<!-- Primeflex -->
+<div class="flex justify-content-center items-align-center">
+  This is a card
+</div>
+```
+
+Not that big of a difference, but it makes a huge difference in the long run. Also Primeflex doesn't allow arbitrary values and doesn't
+provide as many utility classes as Tailwind, so it is inevitable to write custom classes which removes the purpose of using a utility-first CSS framework.
+
+Believe me, it is a lot easier to write w-1/2 than width: 50%.
+
+**Main reason is that the use case was perfect for Tailwind.**
+
+## The Golden Rules of Use Cases
+
+1. **Team Expertise Matters**
+- The best technology is often the one your team knows well
+- Learning curves cost real time and money
+
+2. **Project Requirements Are King**
+- Just because it worked for Spotify doesn't mean it'll work for your podcast app
+- Scale for what you need, not what you dream of needing
+
+3. **Consider the Long Game**
+- Will this choice make sense in 6 months?
+- Can you hire people who know this technology?
+- Is the community active and healthy?
+
+## When You're Getting It Wrong
+
+You might be ignoring use cases if you've ever said:
+- "Let's use microservices because that's what Amazon does"
+- "We need AI in this todo app"
+- "GraphQL is newer, so it must be better"
+
+## I've Made a Huge Mistake
+
+I also made the mistake of ignoring use cases. I once chose a Go backend for a freelance project, even though I didn't really Know Go.
+I mean, the Go maybe would've been perfect for the project, but I didn't know it well enough to make it work.
+
+More time was spent on learning Go than actually developing the project, and at the end, I switched to Node.js because I was more familiar with it.
+
+Why did I choose Go in the first place? Because it was the new cool kid on the block and I wanted to learn it.
+Also, I thought that it would be faster than Node.js, but I was wrong. For my use case, the app didn't need to be that fast,
+the CPU and memory usage wasn't that important, I probably wouldn't use concurrency and the app wasn't that complex.
+
+**Luckily, I did that switch pretty early in development, so I didn't lose that much time and the project was finished on time.**
+
+## The Uncomfortable Truth
+
+Sometimes the right tool is the boring one. Sometimes it's the one that makes you feel like you're not on the cutting edge. And that's okay! Your job is to solve problems, not to have the most impressive tech stack on your resume.
+
+## Final Thoughts
+
+Remember: Every time you choose a technology without properly considering the use case, somewhere in the world, a developer inherits a codebase they'll curse for eternity.
+
+Choose wisely, my friends. Your future self (and your team) will thank you.
+
+---
+*Written by a developer who learned these lessons the hard way... multiple times... and will probably learn them again.*

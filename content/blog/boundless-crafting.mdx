@@ -1,0 +1,206 @@
+---
+title: Creation of Boundless Crafting
+description: How I Bult infinite crafting game in a weekend
+date: 2024-11-13
+---
+
+<div>
+  <MarkdownVideo
+    src="https://nikicaraznatovic-portfolio.s3.eu-central-1.amazonaws.com/blogs/boundless-crafting-blob/boundless+crafting.mp4"
+  />
+  <a href="https://boundless-crafting.nikicaraznatovic.me/" className="mt-2 inline-flex">
+    Checkout Boundless Crafting
+  </a>
+</div>
+
+Ever wondered what happens when a developer has a free weekend and stumbles upon an interesting game? They obviously decide to recreate it from scratch, because who needs rest anyway?
+
+## The Spark
+
+While diving into the endless rabbit hole of the internet, I discovered "Infinite Crafting" by <a href="https://neal.fun/" target="_blank" >Neal Agarwal.</a> The concept was brilliantly simple: combine items to create new ones, rinse and repeat. As the game wasn't open source, and I had a weekend to burn, I thought, "How hard could it be?"
+
+*(Narrator: It was harder than they thought.)*
+
+## The Development Journey
+
+### Redis: My Speed Dating with Caching
+
+First challenge: make combinations lightning fast. Nobody wants to wait while mixing water and dirt to make mud (revolutionary, I know).
+
+The solution? Cache everything. If someone discovers that mixing 'Unicorn' and 'Glitter' makes 'Instagram Filter', we store that for posterity. This way, when the next person tries the same combination, they get instant results.
+
+But wait, there's more! We needed to handle reversible combinations because:
+```
+Water + Fire = Steam
+```
+should be the same as:
+```
+Fire + Water = Steam
+```
+
+### Postgres: Because Every Element Needs a Home
+
+While Redis handled our speedy combinations, we needed a more permanent residence for our growing element family. Enter Postgres, our trusted database butler.
+
+Each element needed its own identity crisis management system (aka proper database schema):
+```sql
+CREATE TABLE "Element" (
+    "id" SERIAL PRIMARY KEY,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
+    "name" TEXT NOT NULL,
+    "emoji" TEXT NOT NULL,
+    "first" TEXT NOT NULL,
+    "second" TEXT NOT NULL
+);
+```
+
+Why Postgres? Because when you're dealing with thousands of players discovering "Coffee + Keyboard = Bug", you need ACID compliance and proper relationships. Plus, it makes for great bedtime reading when you're querying the most bizarre combinations players have discovered.
+
+This also probably could've been done with a NoSQL database, but I wanted to flex my SQL muscles and show Postgres some love.
+
+### Hono
+
+For the backend, I chose Hono because... well, have you seen how fast and lightweight it is? It plays nicely with edge functions, which is perfect for a game that needs to be as responsive as a caffeinated developer during a deadline.
+
+```typescript
+app.post('/combine', async (c) => {
+  const { first, second } = c.req.query();
+  if (!first || !second) {
+    return c.text("Please provide first and second query parameters");
+  }
+
+  // Check cache first
+  const cachedResult = await findElementInCache(first, second);
+  if (cachedResult) {
+    return c.json(cachedResult);
+  }
+
+  // Not in cache? Maybe it's in the database
+  const exists = await prisma.element.findFirst({
+    where: {
+      OR: [
+        {
+          first,
+          second,
+        },
+        {
+          first: second,
+          second: first,
+        },
+      ],
+    },
+  });
+
+  if (exists) {
+    // Cache the database result
+    await setToCache(cacheKey, exists);
+    return c.json(exists);
+  }
+
+  // Not in db? Time to make the AI earn its keep
+  const result = await askAIPolitely(first, second)
+
+  if (!result) {
+    return c.text("No response");
+  }
+
+  const newElement = JSON.parse(result);
+
+  // Cache it and save it to db for the next brave soul
+  const el = await prisma.element.create({
+    data: {
+      first,
+      second,
+      name: newElement.name,
+      emoji: newElement.emoji,
+    },
+    select: {
+      name: true,
+      emoji: true,
+    },
+  });
+
+  const cacheKey = `combine:${[first, second].sort().join(":")}`;
+  await setToCache(cacheKey, el)
+  return c.json({ result })
+})
+```
+
+### Never Lose Your Progress (Unless You Clear Your Cache)
+
+Remember the days when losing game progress meant your mom had unplugged the Nintendo to vacuum? Not on my watch! Enter LocalStorage, the unsung hero of browser-based game saves.
+
+```typescript
+// Save progress like it's 1999
+const saveProgress = (elements: Element[]) => {
+  localStorage.setItem('data', JSON.stringify(elements))
+}
+
+// Load progress like it's 2024
+const loadProgress = () => {
+  const saved = localStorage.getItem('data')
+  if (!saved) return DEFAULT_ELEMENTS
+  return JSON.parse(saved)
+}
+```
+
+The best part? Players can continue their element-combining odyssey even when their internet decides to take an unscheduled vacation. LocalStorage keeps everything snug and safe until connectivity returns, like a digital squirrel hoarding nuts for winter.
+
+1. LocalStorage is like a faithful puppy - always there, even when the internet isn't
+2. Hono is the backpack you didn't know you needed - light but fits everything
+3. Postgres is where elements go to retire and tell stories about their combinations
+
+(Because physics doesn't care about your element ordering preferences.)
+
+### AI: When LLMs Join the Party
+
+Creating infinite combinations manually would have taken... well, infinite time. Enter AI, stage left.
+
+**First attempt**: Llama 2 8B
+Result: Let's just say it was giving answers that made "Water + Fire = Unicorn" seem logical.
+
+**Second attempt**: Llama 2 70b
+Result: A little better, but still not quite the "Water + Fire = Steam" we were aiming
+
+**Third attempt**: GPT-3-Turbo
+Result: Better, but still a bit too creative. "Water + Fire = A Rainbow of Existential Dread" wasn't quite what we were aiming for.
+
+**Fourth attempt**: GPT-4o-mini
+Result: Finally, combinations that wouldn't make a scientist cry! With the right prompt engineering, we were cooking with gas (and sometimes literally, depending on the combinations).
+
+### Frontend: The Plot Twist
+
+As a frontend developer, I approached this part with the confidence of someone who hasn't yet realized they're walking into a trap. "Drag and drop? Please, I do this in my sleep!"
+
+Oh, sweet summer child.
+
+Creating a custom drag and drop system turned out to be the digital equivalent of solving a Rubik's cube blindfolded. Here's what I learned:
+
+1. **The Basics Weren't Basic**
+- Making elements draggable? Easy.
+- Making them look good while being dragged? Not so much.
+- Getting them to actually drop where you want them? Pure sorcery.
+
+2. **Mobile Support Was... Fun**
+- I didn't do it, that's why it was fun, but I can imagine the horror
+- The game is not responsive, I didn't have time to do it.
+
+## The End Result
+
+After one weekend, several coffee pots, and what felt like a thousand Git commits, Boundless Crafting was born. Is it perfect? No. Is it fun? Absolutely. Does it sometimes create combinations that make you question reality? You bet!
+
+## Lessons Learned
+
+1. "It's just drag and drop" are dangerous last words
+2. AI is amazing but needs proper guidance (like a very smart puppy)
+3. Redis is your friend, especially when dealing with infinite possibilities
+4. Never underestimate the complexity of what seems simple
+5. Free weekends are meant for challenging yourself (and maybe questioning your life choices)
+
+Want to try it out? <a href="https://boundless-crafting.nikicaraznatovic.me/" target="_blank">
+  Check out Boundless Crafting here
+</a> and see if you can create something that makes the AI question its training data!
+
+And thanks to Neal Agarwal for the inspiration. I hope I did your concept justice (or at least didn't butcher it too much).
+Also <a href="https://neal.fun/" target="_blank">check out his projects</a> if you want to lose a few hours exploring the wonders of the internet.

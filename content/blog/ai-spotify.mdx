@@ -1,0 +1,128 @@
+---
+title: Spotify AI Playlists
+description: How I built an AI playlist generator for Spotify
+date: 2025-03-27
+---
+
+<div>
+  <MarkdownVideo
+    src="https://nikicaraznatovic-portfolio.s3.eu-central-1.amazonaws.com/blogs/spotify-ai-playlists/spotify-ai-playlist-video.mp4"
+  />
+  <a href="https://boundless-crafting.nikicaraznatovic.me/" className="mt-2 inline-flex">
+    Checkout Boundless Crafting
+  </a>
+</div>
+
+[//]: # (![AI playlist magic]&#40;https://nikicaraznatovic-portfolio.s3.eu-central-1.amazonaws.com/blogs/spotify-ai-playlists/spotify-ai-playlist-cover.png&#41;)
+
+## Playlists That Actually Know What You Want to Hear
+
+We've all been there: Spotify suggests a playlist that makes you wonder if an algorithm is secretly plotting against you. "*Why* would I want to listen to polka covers of 80s hits at 7am on a Tuesday?"
+
+That's why I built this little weekend project—a playlist generator that combines Next.js, Hono.js, and ChatGPT-4o to create playlists that actually understand your musical soul.
+
+## How This Thing Works
+
+The tech stack is pretty straightforward:
+- Next.js for the frontend (because I like things pretty and fast)
+- Hono.js for API handling (because speed matters when you need your sad songs ASAP)
+- ChatGPT-4o for the smart playlist recommendations (the real MVP here)
+- Spotify API integration (for digging into your listening history)
+- Python (for generating the playlist cover art, because why not?)
+
+You log in with Spotify, and the app does some digital snooping through your listening history—don't worry, it's not judging your 3am ABBA marathons.
+It just wants to know what makes your ears happy.
+
+Then you prompt the AI what you want to listen to, click generate and wait a bit.
+
+After it's done, you can save the playlist to your Spotify account, and it even generates a cover art that matches the vibe of your playlist.
+
+## The Secret Sauce: Prompts
+
+The real magic happens with prompts. Want a playlist for "pretending I'm the main character in a movie while walking in the rain"? Just type it in! Some of my personal favorites:
+
+- "Music for cooking that makes me feel like a Michelin chef instead of someone burning pasta"
+- "Songs that will make my workout feel shorter than it actually is"
+- "Tunes for when my code won't compile and I'm questioning my career choices"
+
+The AI takes your prompt, combines it with your listening history, and voilà—a playlist that feels like it was made by a friend who actually knows your taste.
+
+## From "Hmm, I Wonder If..." to Working Project
+
+This started when I was procrastinating on actual work and thought, "Could I make something better than Spotify's recommendations without a team of 50 engineers?"
+
+After wrestling with Spotify's API (we had some disagreements), convincing ChatGPT-4o to understand that "sad cowboy hours" is a legitimate musical mood, and putting together a UI that doesn't offend the eyes, it actually worked!
+
+```javascript
+// The heart of the operation
+const generatePersonalizedPlaylist = async (userData, userPrompt) => {
+  const userTopArtists = await spotify.getUserTopArtists(userData.id);
+  const userGenres = extractGenres(userTopArtists);
+
+  const playlistSeed = {
+    artists: userTopArtists.slice(0, 3).map(artist => artist.id),
+    genres: userGenres.slice(0, 2),
+    promptDescription: userPrompt // The magic ingredient
+  };
+
+  const aiSuggestions = await gpt4o.generateMusicSuggestions(playlistSeed);
+  // Where dreams become playlists
+}
+```
+
+But because I like stuff to have personalized, especially playlist cover art, i created a Python script
+that is running on Flask server that generates the cover art for the playlist based on the prompt you entered.
+
+It will get the image of the random artist from the playlist and then generated a
+title text over it, that of course ChatGPT-4o generated.
+
+## How to Get Your Hands On It
+
+Using it is super simple:
+
+1. Log in with Spotify
+2. Type in your playlist prompt (be as specific or weird as you want)
+3. Watch as it creates a playlist that somehow knows exactly what you meant
+4. Save it to your Spotify and pretend you spent hours curating it
+
+## Is it good?
+
+Well, depends. As with every AI prompting, you have to be specific. The more specific you are, the better the results.
+I mean, if you ask for "music for a party," you might end up with a mix of polka and whale sounds. But if you say "upbeat indie tracks for a summer road trip," you're golden.
+
+I like the fact that for the same prompt, different users will get different results
+because it takes into account what you actually listen to and not just 4o random songs from the same genre.
+
+## Future Plans (If I Find Another Free Weekend)
+
+Since this is just a hobby project, I'm keeping ambitions realistic:
+- Playlist generation that can handle even more specific vibes
+- Better handling of those obscure genres you think only you listen to
+- A feature that explains why it chose each song (for the music nerds)
+- Better error handling (because let's be real, we all need that)
+
+## My little confession
+
+I use it every day. Literally. Every day.
+I have already 10 office trap playlists... it's becoming a problem.
+
+It does sometime give me some weird results, that's why i added a delete playlist functionality and
+regenerate the songs you don't like, or the ones that don't fit in the playlist.
+
+I went on a little road trip with friends, and I used it to generate a playlist for the trip.
+It was a trap playlist, but it was so good that my friend that doesn't generally listen to trap
+was like "this is actually good for road trip, i can listen to this".
+
+**That's a win for me!**
+
+## Give It a Spin
+
+If you're tired of playlists that seem to have only a passing familiarity with your music taste, give this little project a try. It might not change your life, but it'll definitely improve your commute.
+
+I implemented a PRO plan that can't be purchased, because I don't want to deal with payments, but I wanted to test the functionality.
+
+If you really want to try it and use it, send me an email, i'll add you to the PRO plan for **FREE**.
+
+---
+
+*A weekend project that understands both your music taste and that sometimes you just need a playlist for "cleaning the apartment like you're in a montage scene."*
