@@ -63,7 +63,7 @@ export default function Career() {
           const duration = calculateDuration(item.startDate, item.endDate);
 
           return (
-            <li key={item.title} className='mb-4 flex justify-between'>
+            <li key={item.title} className='mb-4 flex items-center gap-3'>
               <div>
                 <h4 className='text'>{item.title}</h4>
                 <div className='text-muted'>
@@ -73,6 +73,7 @@ export default function Career() {
                 </div>
                 <p className='text-muted text-sm'>{duration}</p>
               </div>
+              <div className='bg-muted/20 mr-2 h-[1px] flex-1'></div>
               <p className='text-muted text-sm'>
                 {startFormatted} – {endFormatted}
               </p>

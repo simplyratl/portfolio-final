@@ -31,7 +31,11 @@ export default function Blogs() {
     .sort((a, b) => b - a);
 
   return (
-    <PageWrapper title='Blog' className='slide-enter-content'>
+    <PageWrapper
+      title='Blog'
+      className='slide-enter-content'
+      description='My thoughts and ideas'
+    >
       <div className={cn('grid grid-cols-1 gap-2 transition-opacity')}>
         {sortedYears.map((year) => (
           <div

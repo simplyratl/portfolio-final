@@ -4,15 +4,19 @@ import PageWrapper from '@/components/shared/PageWrapper';
 const skills = [
   'React',
   'Next.js',
+  'Vue.js',
   'TypeScript',
   'Tailwind CSS',
   'UI/UX',
-  'Design Systems',
 ];
 
 export default function About() {
   return (
-    <PageWrapper title='About' className='slide-enter-content'>
+    <PageWrapper
+      title='About'
+      description='More about me'
+      className='slide-enter-content'
+    >
       <section className='mb-12'>
         <h3 className='text-md text-muted mb-4 font-medium'>Biography</h3>
         <div className='slide-enter-content space-y-4'>

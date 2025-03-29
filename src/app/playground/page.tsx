@@ -9,7 +9,7 @@ export default function Page() {
       description='Fun stuff I build while I have free time'
       className='slide-enter-content'
     >
-      <ul className='slide-enter-content grid grid-cols-1 gap-4 md:grid-cols-2'>
+      <ul className='slide-enter-content grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-4'>
         {playground.map((playground) => (
           <li
             key={playground.title}
