@@ -9,7 +9,7 @@ export const socials = [
   },
   {
     name: 'LinkedIn',
-    url: 'www.linkedin.com/in/nikica-raznatovic',
+    url: 'https://linkedin.com/in/nikica-raznatovic',
     icon: <LinkedinIcon />,
   },
 ];
