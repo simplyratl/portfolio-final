@@ -1,3 +1,5 @@
+import ProjectShowcase from '@/components/blocks/home/ProjectShowcase';
+
 export default function Home() {
   return (
     <main className='slide-enter-content'>
@@ -24,6 +26,8 @@ export default function Home() {
         </p>
         <p>Currently, working as a Frontend Engineer at Coreit</p>
       </div>
+
+      <ProjectShowcase />
     </main>
   );
 }

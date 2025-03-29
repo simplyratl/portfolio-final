@@ -7,6 +7,7 @@ import { socials } from '@/constants/socials';
 import SocialButton from '@/components/shared/SocialButton';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react'; // Assuming you use Lucide icons
+import ToggleTheme from './ToggleTheme';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,6 +47,9 @@ export default function Header() {
               <SocialButton social={social} className='text-muted/80' />
             </li>
           ))}
+          <li>
+            <ToggleTheme className='text-muted/80' />
+          </li>
         </ul>
       </div>
 

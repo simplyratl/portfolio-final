@@ -1,5 +1,5 @@
-import GithubIcon from '@/components/icons/GithubIcon';
-import LinkedinIcon from '@/components/icons/LinkedInIcon';
+import GithubIcon from '@/icons/GithubIcon';
+import LinkedinIcon from '@/icons/LinkedInIcon';
 
 export const socials = [
   {

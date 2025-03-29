@@ -3,7 +3,7 @@
 import { JSX, useEffect, useState } from 'react';
 import { motion, useAnimate } from 'motion/react';
 import AppTooltip from '@/components/shared/Tooltip';
-import ArrowUpRightIcon from '@/components/icons/ArrowUpIcon';
+import ArrowUpRightIcon from '@/icons/ArrowUpIcon';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 

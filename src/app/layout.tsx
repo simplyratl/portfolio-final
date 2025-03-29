@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist_Mono, Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/shared/Header';
+import Providers from '@/components/shared/Providers';
 
 const interFont = Inter({
   variable: '--font-inter',
@@ -24,14 +25,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body
-        className={`${interFont.variable} ${geistMono.variable} dark antialiased`}
+        className={`${interFont.variable} ${geistMono.variable} antialiased`}
       >
-        <div className='mx-auto max-w-screen-md px-4 pt-6 pb-10'>
-          <Header />
-          <div className='mt-10'>{children}</div>
-        </div>
+        <Providers>
+          <div className='mx-auto max-w-screen-md px-4 pt-6 pb-10'>
+            <Header />
+            <div className='mt-10'>{children}</div>
+          </div>
+        </Providers>
       </body>
     </html>
   );
