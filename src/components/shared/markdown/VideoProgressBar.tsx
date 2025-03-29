@@ -104,20 +104,20 @@ function VideoProgressBar({
     <div className={cn('flex h-2 items-center gap-3', className)}>
       <button
         onClick={togglePlaying}
-        className='flex shrink-0 items-center justify-center rounded-lg bg-transparent p-1 hover:bg-white/20'
+        className='hover:bg-primary/20 flex shrink-0 items-center justify-center rounded-lg bg-transparent p-1'
       >
         {isPlaying ? <Pause className='size-4' /> : <Play className='size-4' />}
       </button>
 
       <div
-        className='h-1.5 w-full cursor-pointer rounded-full bg-zinc-300/50'
+        className='bg-muted/40 h-1.5 w-full cursor-pointer rounded-full'
         onClick={(e) => handleProgressBarClick(e.nativeEvent)}
         onMouseDown={handleMouseDown}
         ref={progressBarRef}
       >
         <div className='relative h-full'>
           <div
-            className='h-full rounded-full bg-white transition-all'
+            className='bg-primary h-full rounded-full transition-all'
             style={{ width: `${progress}%` }}
           />
         </div>

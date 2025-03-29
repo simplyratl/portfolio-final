@@ -12,7 +12,7 @@ export const navLinks = [
     label: 'Projects',
   },
   {
-    href: '/contact',
-    label: 'Contact',
+    href: '/playground',
+    label: 'Playground',
   },
 ];

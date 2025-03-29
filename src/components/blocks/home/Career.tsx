@@ -53,7 +53,6 @@ function calculateDuration(startDateStr: string, endDateStr: string): string {
 export default function Career() {
   return (
     <div>
-      <h2 className='text-2xl font-bold'>Career</h2>
       <ul className='mt-4'>
         {careerItems.map((item) => {
           const startFormatted = format(parseISO(item.startDate), 'MMM yyyy');
@@ -64,19 +63,18 @@ export default function Career() {
           const duration = calculateDuration(item.startDate, item.endDate);
 
           return (
-            <li key={item.title} className='mb-4'>
-              <h3 className='text-xl font-medium'>{item.title}</h3>
-              <div className='text-accent'>
-                <span>{item.company}</span>
-                <span className='mx-1'>•</span>
-                <span>{item.location}</span>
+            <li key={item.title} className='mb-4 flex justify-between'>
+              <div>
+                <h4 className='text'>{item.title}</h4>
+                <div className='text-muted'>
+                  <span>{item.company}</span>
+                  <span className='mx-1'>•</span>
+                  <span>{item.location}</span>
+                </div>
+                <p className='text-muted text-sm'>{duration}</p>
               </div>
-              <p className='text-accent'>
-                <span>
-                  {startFormatted} – {endFormatted}
-                </span>
-                <span className='mx-1'>•</span>
-                <span>{duration}</span>
+              <p className='text-muted text-sm'>
+                {startFormatted} – {endFormatted}
               </p>
             </li>
           );

@@ -2,6 +2,8 @@ import { Mdx } from '@/components/shared/markdown/MDXComponent';
 import { allBlogs } from 'contentlayer2/generated';
 import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
+import MarkdownVideo from '@/components/shared/markdown/MarkdownVideo';
 
 type BlogPageProps = {
   params: Promise<{ slug: string }>;
@@ -36,12 +38,29 @@ export default async function BlogPage({ params }: BlogPageProps) {
   return (
     <main>
       <article className='slide-enter-content'>
-        <h1 className='articulat-cf text-4xl font-semibold'>{blog.title}</h1>
-        <p className='articulat-cf text-muted/50 mt-3 font-medium'>
+        <h1 className='articulat-cf text-3xl font-semibold'>{blog.title}</h1>
+        <p className='articulat-cf text-muted mt-3 font-medium'>
           {format(blog.date, 'MMMM dd yyyy')}
         </p>
-        <div className='inter mt-10'>
-          <Mdx code={blog.body.code} />
+        <div className='mt-10'>
+          <div className='space-y-6'>
+            {blog.mainImage && (
+              <div className='relative h-110 w-full overflow-hidden rounded-xl'>
+                <Image
+                  src={blog.mainImage}
+                  alt={blog.title}
+                  fill
+                  className='object-cover'
+                />
+              </div>
+            )}
+
+            {blog.mainVideo && <MarkdownVideo src={blog.mainVideo} />}
+          </div>
+
+          <div className='inter mt-10'>
+            <Mdx code={blog.body.code} />
+          </div>
         </div>
       </article>
 

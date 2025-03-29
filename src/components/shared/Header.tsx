@@ -13,7 +13,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className='relative flex h-14 place-items-center justify-between px-4'>
+    <header className='relative flex h-14 place-items-center justify-between'>
       <Link href='/'>
         <Logo className='size-9' />
       </Link>
@@ -33,7 +33,7 @@ export default function Header() {
           {navLinks.map((link) => (
             <Link
               href={link.href}
-              className='dark:hover:bg-secondary text-muted/80 flex h-8 items-center rounded-lg px-4 transition-colors hover:text-white'
+              className='hover:bg-secondary text-muted/80 flex h-8 items-center rounded-lg px-4 transition-colors hover:text-black dark:hover:text-white'
               key={link.label}
             >
               {link.label}
@@ -60,7 +60,7 @@ export default function Header() {
             {navLinks.map((link) => (
               <Link
                 href={link.href}
-                className='dark:hover:bg-secondary text-muted/80 flex h-10 items-center rounded-lg px-4 transition-colors hover:text-white'
+                className='dark:hover:bg-secondary text-muted/80 flex h-10 items-center rounded-lg px-4 transition-colors hover:text-black dark:hover:text-white'
                 key={link.label}
                 onClick={() => setIsMenuOpen(false)}
               >

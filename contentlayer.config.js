@@ -59,6 +59,14 @@ export const Blog = defineDocumentType(() => ({
       required: false,
       default: true,
     },
+    mainImage: {
+      type: 'string',
+      required: false,
+    },
+    mainVideo: {
+      type: 'string',
+      required: false,
+    },
   },
   computedFields,
 }));
@@ -73,7 +81,7 @@ export default makeSource({
       [
         rehypePrettyCode,
         {
-          theme: 'github-dark',
+          theme: 'github-dark-default',
           onVisitLine(node) {
             // Prevent lines from collapsing in `display: grid` mode, and allow empty
             // lines to be copy/pasted

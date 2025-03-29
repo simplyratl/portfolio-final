@@ -14,9 +14,9 @@ export default function Blogs() {
   const router = useRouter();
 
   return (
-    <div>
+    <div className='slide-enter-content'>
       <div className='mb-4'>
-        <h1 className='text-accent pl-3 text-3xl font-bold'>Blogs</h1>
+        <h1 className='text-3xl font-bold'>Blog</h1>
       </div>
 
       <div
@@ -31,7 +31,7 @@ export default function Blogs() {
             >
               <Link
                 href={blog.slug}
-                className='hover:bg-accent/5 flex w-full items-center gap-2 rounded-lg px-4 py-3 no-underline transition-all'
+                className='hover:bg-muted/5 flex w-full items-center gap-2 rounded-lg px-4 py-3 no-underline transition-all'
               >
                 <span className='articulat-cf text-muted/80 group-hover/item:!text-foreground group-hover/list:text-muted/40 font-semibold transition-all'>
                   {blog.title}
