@@ -3,7 +3,7 @@ import ProjectShowcase from '@/components/blocks/home/ProjectShowcase';
 export default function Home() {
   return (
     <main className='slide-enter-content'>
-      <div className='flex items-center justify-between'>
+      <div className='inline-flex flex-col sm:flex sm:flex-row sm:items-center sm:justify-between'>
         <h1 className='text-3xl font-bold'>Nikica Ražnatović</h1>
 
         <a
