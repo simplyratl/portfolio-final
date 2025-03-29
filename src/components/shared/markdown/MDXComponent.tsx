@@ -1,12 +1,12 @@
 'use client';
 
 import * as React from 'react';
-import Image from 'next/image';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 
 import { MdxCard } from '@/components/shared/markdown/MdxCard';
 import MarkdownVideo from '@/components/shared/markdown/MarkdownVideo';
 import { cn } from '@/lib/utils';
+import MarkdownImage from '@/components/shared/markdown/MarkdownImage';
 
 const components = {
   h1: ({ ...props }) => (
@@ -112,7 +112,7 @@ const components = {
       {...props}
     />
   ),
-  Image,
+  Image: MarkdownImage,
   Card: MdxCard,
   MarkdownVideo,
 };
