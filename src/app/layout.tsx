@@ -5,6 +5,7 @@ import Header from '@/components/shared/Header';
 
 const interFont = Inter({
   variable: '--font-inter',
+  subsets: ['latin', 'latin-ext'],
 });
 
 const geistMono = Geist_Mono({
