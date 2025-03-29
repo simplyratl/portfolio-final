@@ -1,4 +1,3 @@
-import { ArrowRightDownIcon } from '@/icons/ArrowRightDownIcon';
 import ArrowRightUpIcon from '@/icons/ArrowRightUpIcon';
 import Link from 'next/link';
 import React from 'react';
