@@ -5,17 +5,16 @@ date: 2025-03-27,
 mainVideo: https://nikicaraznatovic-portfolio.s3.eu-central-1.amazonaws.com/blogs/spotify-ai-playlists/spotify-ai-playlist-video.mp4
 ---
 
-
-
 ## Playlists That Actually Know What You Want to Hear
 
-We've all been there: Spotify suggests a playlist that makes you wonder if an algorithm is secretly plotting against you. "*Why* would I want to listen to polka covers of 80s hits at 7am on a Tuesday?"
+We've all been there: Spotify suggests a playlist that makes you wonder if an algorithm is secretly plotting against you. "_Why_ would I want to listen to polka covers of 80s hits at 7am on a Tuesday?"
 
 That's why I built this little weekend project—a playlist generator that combines Next.js, Hono.js, and ChatGPT-4o to create playlists that actually understand your musical soul.
 
 ## How This Thing Works
 
 The tech stack is pretty straightforward:
+
 - Next.js for the frontend (because I like things pretty and fast)
 - Hono.js for API handling (because speed matters when you need your sad songs ASAP)
 - ChatGPT-4o for the smart playlist recommendations (the real MVP here)
@@ -52,14 +51,14 @@ const generatePersonalizedPlaylist = async (userData, userPrompt) => {
   const userGenres = extractGenres(userTopArtists);
 
   const playlistSeed = {
-    artists: userTopArtists.slice(0, 3).map(artist => artist.id),
+    artists: userTopArtists.slice(0, 3).map((artist) => artist.id),
     genres: userGenres.slice(0, 2),
-    promptDescription: userPrompt // The magic ingredient
+    promptDescription: userPrompt, // The magic ingredient
   };
 
   const aiSuggestions = await gpt4o.generateMusicSuggestions(playlistSeed);
   // Where dreams become playlists
-}
+};
 ```
 
 But because I like stuff to have personalized, especially playlist cover art, i created a Python script
@@ -88,6 +87,7 @@ because it takes into account what you actually listen to and not just 4o random
 ## Future Plans (If I Find Another Free Weekend)
 
 Since this is just a hobby project, I'm keeping ambitions realistic:
+
 - Playlist generation that can handle even more specific vibes
 - Better handling of those obscure genres you think only you listen to
 - A feature that explains why it chose each song (for the music nerds)
@@ -117,4 +117,4 @@ If you really want to try it and use it, send me an email, i'll add you to the P
 
 ---
 
-*A weekend project that understands both your music taste and that sometimes you just need a playlist for "cleaning the apartment like you're in a montage scene."*
+_A weekend project that understands both your music taste and that sometimes you just need a playlist for "cleaning the apartment like you're in a montage scene."_

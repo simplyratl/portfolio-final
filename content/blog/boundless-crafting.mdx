@@ -11,7 +11,7 @@ Ever wondered what happens when a developer has a free weekend and stumbles upon
 
 While diving into the endless rabbit hole of the internet, I discovered "Infinite Crafting" by <a href="https://neal.fun/" target="_blank" >Neal Agarwal.</a> The concept was brilliantly simple: combine items to create new ones, rinse and repeat. As the game wasn't open source, and I had a weekend to burn, I thought, "How hard could it be?"
 
-*(Narrator: It was harder than they thought.)*
+_(Narrator: It was harder than they thought.)_
 
 ## The Development Journey
 
@@ -22,10 +22,13 @@ First challenge: make combinations lightning fast. Nobody wants to wait while mi
 The solution? Cache everything. If someone discovers that mixing 'Unicorn' and 'Glitter' makes 'Instagram Filter', we store that for posterity. This way, when the next person tries the same combination, they get instant results.
 
 But wait, there's more! We needed to handle reversible combinations because:
+
 ```
 Water + Fire = Steam
 ```
+
 should be the same as:
+
 ```
 Fire + Water = Steam
 ```
@@ -35,6 +38,7 @@ Fire + Water = Steam
 While Redis handled our speedy combinations, we needed a more permanent residence for our growing element family. Enter Postgres, our trusted database butler.
 
 Each element needed its own identity crisis management system (aka proper database schema):
+
 ```sql
 CREATE TABLE "Element" (
     "id" SERIAL PRIMARY KEY,
@@ -59,7 +63,7 @@ For the backend, I chose Hono because... well, have you seen how fast and lightw
 app.post('/combine', async (c) => {
   const { first, second } = c.req.query();
   if (!first || !second) {
-    return c.text("Please provide first and second query parameters");
+    return c.text('Please provide first and second query parameters');
   }
 
   // Check cache first
@@ -91,10 +95,10 @@ app.post('/combine', async (c) => {
   }
 
   // Not in db? Time to make the AI earn its keep
-  const result = await askAIPolitely(first, second)
+  const result = await askAIPolitely(first, second);
 
   if (!result) {
-    return c.text("No response");
+    return c.text('No response');
   }
 
   const newElement = JSON.parse(result);
@@ -113,10 +117,10 @@ app.post('/combine', async (c) => {
     },
   });
 
-  const cacheKey = `combine:${[first, second].sort().join(":")}`;
-  await setToCache(cacheKey, el)
-  return c.json({ result })
-})
+  const cacheKey = `combine:${[first, second].sort().join(':')}`;
+  await setToCache(cacheKey, el);
+  return c.json({ result });
+});
 ```
 
 ### Never Lose Your Progress (Unless You Clear Your Cache)
@@ -126,15 +130,15 @@ Remember the days when losing game progress meant your mom had unplugged the Nin
 ```typescript
 // Save progress like it's 1999
 const saveProgress = (elements: Element[]) => {
-  localStorage.setItem('data', JSON.stringify(elements))
-}
+  localStorage.setItem('data', JSON.stringify(elements));
+};
 
 // Load progress like it's 2024
 const loadProgress = () => {
-  const saved = localStorage.getItem('data')
-  if (!saved) return DEFAULT_ELEMENTS
-  return JSON.parse(saved)
-}
+  const saved = localStorage.getItem('data');
+  if (!saved) return DEFAULT_ELEMENTS;
+  return JSON.parse(saved);
+};
 ```
 
 The best part? Players can continue their element-combining odyssey even when their internet decides to take an unscheduled vacation. LocalStorage keeps everything snug and safe until connectivity returns, like a digital squirrel hoarding nuts for winter.
@@ -170,11 +174,13 @@ Oh, sweet summer child.
 Creating a custom drag and drop system turned out to be the digital equivalent of solving a Rubik's cube blindfolded. Here's what I learned:
 
 1. **The Basics Weren't Basic**
+
 - Making elements draggable? Easy.
 - Making them look good while being dragged? Not so much.
 - Getting them to actually drop where you want them? Pure sorcery.
 
 2. **Mobile Support Was... Fun**
+
 - I didn't do it, that's why it was fun, but I can imagine the horror
 - The game is not responsive, I didn't have time to do it.
 
@@ -191,7 +197,8 @@ After one weekend, several coffee pots, and what felt like a thousand Git commit
 5. Free weekends are meant for challenging yourself (and maybe questioning your life choices)
 
 Want to try it out? <a href="https://boundless-crafting.nikicaraznatovic.me/" target="_blank">
-  Check out Boundless Crafting here
+Check out Boundless Crafting here
+
 </a> and see if you can create something that makes the AI question its training data!
 
 And thanks to Neal Agarwal for the inspiration. I hope I did your concept justice (or at least didn't butcher it too much).
