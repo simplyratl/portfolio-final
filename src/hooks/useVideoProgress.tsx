@@ -22,8 +22,8 @@ export const useVideoProgress = ({
 }: UseAnimationProgressProps = {}): UseAnimationProgressReturn => {
   const [isPlaying, setIsPlaying] = useState(initialPlayState);
   const [progress, setProgress] = useState(0);
-  const animationRef = useRef<number | undefined>();
-  const startTimeRef = useRef<number | undefined>();
+  const animationRef = useRef<number | undefined>(undefined);
+  const startTimeRef = useRef<number | undefined>(undefined);
   const pausedProgressRef = useRef<number>(0);
 
   const togglePlaying = useCallback(() => {

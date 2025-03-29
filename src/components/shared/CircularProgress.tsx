@@ -31,20 +31,14 @@ const CircularProgress = ({
 
   // Listen for custom events from VideoProgressBar
   useEffect(() => {
-    const handleProgressUpdate = (e: CustomEvent) => {
+    const handleProgressUpdate = () => {
       // This will be handled by the parent component which controls the progress prop
     };
 
-    document.addEventListener(
-      'videoProgressUpdate',
-      handleProgressUpdate as any
-    );
+    document.addEventListener('videoProgressUpdate', handleProgressUpdate);
 
     return () => {
-      document.removeEventListener(
-        'videoProgressUpdate',
-        handleProgressUpdate as any
-      );
+      document.removeEventListener('videoProgressUpdate', handleProgressUpdate);
     };
   }, []);
 

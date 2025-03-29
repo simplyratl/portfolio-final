@@ -1,13 +1,10 @@
-import { allBlogs } from 'contentlayer/generated';
-import { notFound } from 'next/navigation';
 import { Mdx } from '@/components/shared/markdown/MDXComponent';
+import { allBlogs } from 'contentlayer2/generated';
 import { format } from 'date-fns';
-import Header from '@/components/shared/Header';
+import { notFound } from 'next/navigation';
 
 type BlogPageProps = {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 };
 
 type Headings = {

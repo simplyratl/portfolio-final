@@ -22,7 +22,6 @@ function MarkdownVideo({ src, className }: BlogVideoProps) {
     progress,
     isPlaying,
     togglePlaying,
-    setIsPlaying,
     setProgress: setProgressHook,
   } = useVideoProgress({
     duration,
@@ -58,21 +57,16 @@ function MarkdownVideo({ src, className }: BlogVideoProps) {
   }, []);
 
   React.useEffect(() => {
-    const handleProgressUpdate = (e: CustomEvent) => {
-      setLocalProgress(e.detail.progress);
-      setProgressHook(e.detail.progress);
+    const handleProgressUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      setLocalProgress(customEvent.detail.progress);
+      setProgressHook(customEvent.detail.progress);
     };
 
-    document.addEventListener(
-      'videoProgressUpdate',
-      handleProgressUpdate as any
-    );
+    document.addEventListener('videoProgressUpdate', handleProgressUpdate);
 
     return () => {
-      document.removeEventListener(
-        'videoProgressUpdate',
-        handleProgressUpdate as any
-      );
+      document.removeEventListener('videoProgressUpdate', handleProgressUpdate);
     };
   }, [setProgressHook]);
 

@@ -13,7 +13,6 @@ interface VideoProgressBarProps {
 
 function VideoProgressBar({
   videoRef,
-  duration,
   className,
   isPlaying,
   togglePlaying,
@@ -50,7 +49,7 @@ function VideoProgressBar({
     };
   }, [videoRef]);
 
-  const handleProgressBarClick = (e: React.MouseEvent) => {
+  const handleProgressBarClick = (e: MouseEvent) => {
     if (!progressBarRef.current || !videoRef.current) return;
 
     const rect = progressBarRef.current.getBoundingClientRect();
@@ -73,14 +72,14 @@ function VideoProgressBar({
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
-    handleProgressBarClick(e);
+    handleProgressBarClick(e.nativeEvent);
   };
 
   const handleMouseUp = () => {
     setIsDragging(false);
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
       handleProgressBarClick(e);
     }
@@ -88,16 +87,16 @@ function VideoProgressBar({
 
   React.useEffect(() => {
     if (isDragging) {
-      document.addEventListener('mouseup', handleMouseUp as any);
-      document.addEventListener('mousemove', handleMouseMove as any);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('mousemove', handleMouseMove);
     } else {
-      document.removeEventListener('mouseup', handleMouseUp as any);
-      document.removeEventListener('mousemove', handleMouseMove as any);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mousemove', handleMouseMove);
     }
 
     return () => {
-      document.removeEventListener('mouseup', handleMouseUp as any);
-      document.removeEventListener('mousemove', handleMouseMove as any);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mousemove', handleMouseMove);
     };
   }, [isDragging]);
 
@@ -112,7 +111,7 @@ function VideoProgressBar({
 
       <div
         className='h-1.5 w-full cursor-pointer rounded-full bg-zinc-300/50'
-        onClick={handleProgressBarClick}
+        onClick={(e) => handleProgressBarClick(e.nativeEvent)}
         onMouseDown={handleMouseDown}
         ref={progressBarRef}
       >

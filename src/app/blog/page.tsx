@@ -1,6 +1,6 @@
 'use client';
 
-import { allBlogs } from 'contentlayer/generated';
+import { allBlogs } from 'contentlayer2/generated';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';

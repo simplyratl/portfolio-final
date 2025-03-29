@@ -1,11 +1,11 @@
-import { defineDocumentType, makeSource } from 'contentlayer/source-files';
+import { defineDocumentType, makeSource } from 'contentlayer2/source-files';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import GithubSlugger from 'github-slugger';
 
-/** @type {import('contentlayer/source-files').ComputedFields} */
+/** @type {import('contentlayer2/source-files').ComputedFields} */
 const computedFields = {
   slug: {
     type: 'string',
@@ -33,42 +33,6 @@ const computedFields = {
     },
   },
 };
-
-export const Projects = defineDocumentType(() => ({
-  name: 'Projects',
-  filePathPattern: 'project/**/*.mdx',
-  contentType: 'mdx',
-  fields: {
-    title: {
-      type: 'string',
-      required: true,
-    },
-    description: {
-      type: 'string',
-    },
-    shortDescription: {
-      type: 'string',
-    },
-    toc: {
-      type: 'boolean',
-      required: false,
-      default: false,
-    },
-    tag: {
-      type: 'string',
-      required: true,
-    },
-    publicLink: {
-      type: 'string',
-      required: false,
-    },
-    technologies: {
-      type: 'string',
-      required: false,
-    },
-  },
-  computedFields,
-}));
 
 export const Blog = defineDocumentType(() => ({
   name: 'Blog',
@@ -101,7 +65,7 @@ export const Blog = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: './content',
-  documentTypes: [Blog, Projects],
+  documentTypes: [Blog],
   mdx: {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [

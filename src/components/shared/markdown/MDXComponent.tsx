@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Image from 'next/image';
-import { useMDXComponent } from 'next-contentlayer/hooks';
+import { useMDXComponent } from 'next-contentlayer2/hooks';
 
 import { MdxCard } from '@/components/shared/markdown/MdxCard';
 import MarkdownVideo from '@/components/shared/markdown/MarkdownVideo';
