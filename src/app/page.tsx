@@ -3,7 +3,7 @@ export default function Home() {
     <main className='slide-enter-content'>
       <div className='inline-flex flex-col sm:flex sm:flex-row sm:items-center sm:justify-between'>
         <div>
-          <h1 className='text-3xl font-bold'>Nikica Ražnatović</h1>
+          <h1 className='articulat-cf text-3xl font-bold'>Nikica Ražnatović</h1>
           <p className='text-muted'>Frontend Engineer</p>
         </div>
 

@@ -27,15 +27,7 @@ const components = {
   h6: ({ ...props }) => (
     <h6 className={cn('articulat-cf', props.className)} {...props} />
   ),
-  a: ({ ...props }) => (
-    <a
-      className={cn(
-        'font-medium underline underline-offset-4',
-        props.className
-      )}
-      {...props}
-    />
-  ),
+  a: ({ ...props }) => <a className={cn('link', props.className)} {...props} />,
   p: ({ ...props }) => (
     <p
       className={cn('leading-7 [&:not(:first-child)]:mt-6', props.className)}
@@ -125,7 +117,7 @@ export function Mdx({ code }: MdxProps) {
   const Component = useMDXComponent(code);
 
   return (
-    <div className='mdx slide-enter-content prose dark:prose-invert prose-headings:text-foreground max-w-full'>
+    <div className='mdx slide-enter-content prose dark:prose-invert prose-zinc prose-ul:p-0 prose-ol:p-0 prose-headings:text-foreground max-w-full'>
       <Component components={components} />
     </div>
   );

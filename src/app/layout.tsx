@@ -3,6 +3,7 @@ import { Geist_Mono, Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/shared/Header';
 import Providers from '@/components/shared/Providers';
+import { articulatCF } from '@/fonts/articulat/articulat';
 
 const interFont = Inter({
   variable: '--font-inter',
@@ -27,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body
-        className={`${interFont.variable} ${geistMono.variable} antialiased`}
+        className={`${interFont.variable} ${geistMono.variable} ${articulatCF.variable} antialiased`}
       >
         <Providers>
           <div className='mx-auto max-w-screen-md px-4 pt-6 pb-10'>

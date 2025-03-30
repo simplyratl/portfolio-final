@@ -1,6 +1,8 @@
 import PageWrapper from '@/components/shared/PageWrapper';
 import { playground } from '@/constants/playground';
 import Image from 'next/image';
+import ArrowRightUpIcon from '@/icons/ArrowUpIcon';
+import { cn } from '@/lib/utils';
 
 export default function Page() {
   return (
@@ -9,37 +11,35 @@ export default function Page() {
       description='Fun stuff I build while I have free time'
       className='slide-enter-content'
     >
-      <ul className='slide-enter-content grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-4'>
-        {playground.map((playground) => (
-          <li
-            key={playground.title}
-            className='group transition-all duration-300'
-          >
+      <div className='slide-enter-content mt-6 grid grid-cols-1 gap-8 md:grid-cols-2'>
+        {playground.map((item) => (
+          <div key={item.title} className='group'>
             <a
-              href={playground.location}
+              href={item.location}
               target='_blank'
               rel='noopener noreferrer'
-              className='block'
+              className='flex flex-col space-y-2'
             >
-              <div className='relative aspect-video w-full overflow-hidden rounded-md'>
-                <div className='absolute inset-0 z-10 bg-black/0 transition-all duration-300 group-hover:bg-black/20'></div>
+              <div className='border-border/60 relative aspect-[4/3] w-full overflow-hidden rounded-sm border'>
                 <Image
-                  src={playground.image}
-                  alt={playground.title}
+                  src={item.image}
+                  alt={item.title}
                   fill
-                  className='object-cover transition-transform duration-500 ease-out group-hover:scale-105'
+                  className='object-cover'
                 />
               </div>
-              <div className='mt-2'>
-                <h2 className='relative inline-block font-semibold'>
-                  <span>{playground.title}</span>
+
+              <div className='flex flex-col'>
+                <h2 className='text link flex items-center text-lg font-medium'>
+                  {item.title}
+                  <ArrowRightUpIcon className='text-muted ml-1 size-4 opacity-0 transition group-hover:opacity-100' />
                 </h2>
-                <p className='text-muted text-sm'>{playground.description}</p>
+                <p className='text-muted text-[15px]'>{item.description}</p>
               </div>
             </a>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </PageWrapper>
   );
 }

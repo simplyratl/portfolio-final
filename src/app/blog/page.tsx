@@ -59,9 +59,9 @@ export default function Blogs() {
                 >
                   <Link
                     href={blog.slug}
-                    className='hover:bg-muted/5 flex w-full items-center gap-2 rounded-lg px-4 py-3 no-underline transition-all'
+                    className='hover:bg-secondary/50 flex w-full items-center gap-2 rounded-lg px-4 py-3 no-underline transition-all'
                   >
-                    <span className='articulat-cf text-muted/60 group-hover/item:!text-foreground group-hover/list:text-muted/40 font-semibold transition-all'>
+                    <span className='articulat-cf text-muted/80 group-hover/item:!text-foreground font-semibold transition-all'>
                       {blog.title}
                     </span>
                     <span className='text-muted/50 hidden text-sm md:block'>

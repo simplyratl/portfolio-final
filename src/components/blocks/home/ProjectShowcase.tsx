@@ -61,7 +61,7 @@ const ProjectContent = ({
   isExternal,
 }: ProjectContentProps) => (
   <>
-    <h3 className='text-md decoration-muted/60 flex items-center font-medium underline-offset-2 group-hover:underline'>
+    <h3 className='text-md link flex items-center font-medium'>
       {title}
       {isExternal && <ArrowRightUpIcon className='text-muted ml-1 size-4' />}
     </h3>

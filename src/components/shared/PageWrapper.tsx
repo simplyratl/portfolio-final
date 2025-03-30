@@ -15,7 +15,7 @@ export default function PageWrapper({
   return (
     <main className={className}>
       <div className='space-y-1.5'>
-        <h1 className='text-accent text-3xl font-bold'>{title}</h1>
+        <h1 className='text-accent articulat-cf text-3xl font-bold'>{title}</h1>
         {description && <p className='text-muted/70'>{description}</p>}
       </div>
       <div className='mt-8'>{children}</div>
