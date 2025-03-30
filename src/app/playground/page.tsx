@@ -1,8 +1,7 @@
 import PageWrapper from '@/components/shared/PageWrapper';
 import { playground } from '@/constants/playground';
-import Image from 'next/image';
 import ArrowRightUpIcon from '@/icons/ArrowUpIcon';
-import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 export default function Page() {
   return (
