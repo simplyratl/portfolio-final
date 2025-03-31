@@ -1,8 +1,8 @@
 'use client';
 
 import { navLinks } from '@/constants/nav-links';
-import { motion } from 'motion/react';
-import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useState, useRef, useEffect } from 'react';
 import { socials } from '@/constants/socials';
 import SocialButton from '@/components/shared/SocialButton';
 import ToggleTheme from '@/components/shared/ToggleTheme';
@@ -17,15 +17,57 @@ export default function MobileNavigation({ handleMenuToggle }: Props) {
   const router = useAsyncRoute();
   const [isRouteChanging, setIsRouteChanging] = useState(false);
   const [activeLink, setActiveLink] = useState<string | null>(null);
+  const [showLoadingUI, setShowLoadingUI] = useState(false);
+  const minLoadingTimeRef = useRef<NodeJS.Timeout | null>(null);
+  const minLoadingTime = 600; // Minimum loading time in milliseconds to prevent flickering
+
+  // Cleanup function for the timeout
+  useEffect(() => {
+    return () => {
+      if (minLoadingTimeRef.current) {
+        clearTimeout(minLoadingTimeRef.current);
+      }
+    };
+  }, []);
 
   const handleLinkClick = async (href: string) => {
+    // Start route change process
     setIsRouteChanging(true);
     setActiveLink(href);
+    setShowLoadingUI(true);
 
-    await router.push(href);
-    handleMenuToggle();
-    setIsRouteChanging(false);
-    setActiveLink(null);
+    // Set minimum display time for loading UI
+    const startTime = Date.now();
+
+    try {
+      // Perform the actual navigation
+      await router.push(href);
+
+      // Calculate how long the navigation took
+      const navigationTime = Date.now() - startTime;
+
+      // If navigation was faster than our minimum loading time,
+      // wait for the remainder before hiding the loading UI
+      if (navigationTime < minLoadingTime) {
+        await new Promise((resolve) => {
+          minLoadingTimeRef.current = setTimeout(
+            resolve,
+            minLoadingTime - navigationTime
+          );
+        });
+      }
+    } finally {
+      // Clean up after navigation is complete
+      handleMenuToggle();
+      setIsRouteChanging(false);
+      setShowLoadingUI(false);
+      setActiveLink(null);
+
+      if (minLoadingTimeRef.current) {
+        clearTimeout(minLoadingTimeRef.current);
+        minLoadingTimeRef.current = null;
+      }
+    }
 
     return false; // Prevent default link behavior
   };
@@ -38,37 +80,39 @@ export default function MobileNavigation({ handleMenuToggle }: Props) {
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
-      {/* Global loading overlay */}
-      {isRouteChanging && (
-        <motion.div
-          className='bg-background/70 absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm'
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div className='relative flex'>
-            {[0, 1, 2].map((i) => (
-              <motion.span
-                key={i}
-                className='bg-primary mx-1 h-3 w-3 rounded-full'
-                initial={{ y: 0 }}
-                animate={{
-                  y: [0, -12, 0],
-                  opacity: [0.5, 1, 0.5],
-                }}
-                transition={{
-                  repeat: Infinity,
-                  repeatType: 'loop',
-                  duration: 1.2,
-                  delay: i * 0.2,
-                  ease: 'easeInOut',
-                }}
-              />
-            ))}
-          </div>
-        </motion.div>
-      )}
+      {/* Global loading overlay with AnimatePresence for smooth exit */}
+      <AnimatePresence>
+        {showLoadingUI && (
+          <motion.div
+            className='bg-background/70 absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className='relative flex'>
+              {[0, 1, 2].map((i) => (
+                <motion.span
+                  key={i}
+                  className='bg-primary mx-1 h-3 w-3 rounded-full'
+                  initial={{ y: 0 }}
+                  animate={{
+                    y: [0, -12, 0],
+                    opacity: [0.5, 1, 0.5],
+                  }}
+                  transition={{
+                    repeat: Infinity,
+                    repeatType: 'loop',
+                    duration: 1.2,
+                    delay: i * 0.2,
+                    ease: 'easeInOut',
+                  }}
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <nav className='flex flex-col gap-2 p-4'>
         {navLinks.map((link, index) => (
@@ -96,22 +140,25 @@ export default function MobileNavigation({ handleMenuToggle }: Props) {
             >
               {link.label}
 
-              {/* Link-specific highlight animation */}
-              {activeLink === link.href && (
-                <motion.div
-                  className='border-primary absolute inset-0 rounded-lg border-2'
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: [0, 0.8, 0],
-                    scale: [0.95, 1.05, 0.95],
-                  }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 1.5,
-                    ease: 'easeInOut',
-                  }}
-                />
-              )}
+              {/* Link-specific highlight animation with AnimatePresence */}
+              <AnimatePresence>
+                {activeLink === link.href && (
+                  <motion.div
+                    className='border-primary absolute inset-0 rounded-lg border-2'
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{
+                      opacity: [0, 0.8, 0],
+                      scale: [0.95, 1.05, 0.95],
+                    }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: 1.5,
+                      ease: 'easeInOut',
+                    }}
+                  />
+                )}
+              </AnimatePresence>
             </Link>
           </motion.div>
         ))}
