@@ -33,26 +33,47 @@ export const ProjectCategory = ({
       <div className='mb-6 flex items-center justify-between'>
         <h2 className='text-muted'>{title}</h2>
 
-        {viewMode === 'list' && showNavigation && (
-          <div className='flex gap-2'>
-            <Button
-              ref={navigationPrevRef}
-              size='icon'
-              className='size-6'
-              variant='ghost'
+        <AnimatePresence>
+          {viewMode === 'list' && showNavigation && (
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: -10,
+                transition: {
+                  duration: 0.2,
+                  ease: 'easeInOut',
+                },
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.2, delay: 0.5 },
+              }}
+              exit={{
+                opacity: 0,
+                y: -10,
+              }}
+              className='flex gap-2'
             >
-              <ArrowLeft />
-            </Button>
-            <Button
-              ref={navigationNextRef}
-              size='icon'
-              className='size-6'
-              variant='ghost'
-            >
-              <ArrowRight />
-            </Button>
-          </div>
-        )}
+              <Button
+                ref={navigationPrevRef}
+                size='icon'
+                className='size-6'
+                variant='ghost'
+              >
+                <ArrowLeft />
+              </Button>
+              <Button
+                ref={navigationNextRef}
+                size='icon'
+                className='size-6'
+                variant='ghost'
+              >
+                <ArrowRight />
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <AnimatePresence mode='wait'>
@@ -62,7 +83,7 @@ export const ProjectCategory = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.3 }}
             className='grid grid-cols-1 gap-6 md:grid-cols-2'
           >
             {React.Children.map(children, (child) => (
@@ -75,7 +96,7 @@ export const ProjectCategory = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.3 }}
           >
             <Swiper
               ref={swiperRef}
