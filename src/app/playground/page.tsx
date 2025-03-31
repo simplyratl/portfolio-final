@@ -19,7 +19,7 @@ export default function Page() {
               rel='noopener noreferrer'
               className='flex flex-col space-y-2'
             >
-              <div className='border-border/60 relative aspect-[4/3] w-full overflow-hidden rounded-sm border'>
+              <div className='border-border/60 relative aspect-video w-full overflow-hidden rounded-sm border'>
                 <Image
                   src={item.image}
                   alt={item.title}

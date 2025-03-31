@@ -21,7 +21,7 @@ export const playground: Playground[] = [
     description: 'App that generates playlists based on your mood.',
     location: 'https://playlists.nikicaraznatovic.me/',
     image:
-      'https://nikicaraznatovic-portfolio.s3.eu-central-1.amazonaws.com/boundless-crafting/Boundless+Crafting.png',
+      'https://nikicaraznatovic-portfolio.s3.eu-central-1.amazonaws.com/blogs/spotify-ai-playlists/spotify+playlist+generator.jpg',
     video:
       'https://nikicaraznatovic-portfolio.s3.eu-central-1.amazonaws.com/boundless-crafting/boundless+crafting.mp4',
   },

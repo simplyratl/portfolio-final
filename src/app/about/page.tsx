@@ -38,7 +38,7 @@ export default function About() {
 
       <section className='mb-12'>
         <h3 className='text-md text-muted mb-4'>Skills</h3>
-        <div className='grid grid-cols-2 gap-3 md:grid-cols-3'>
+        <div className='slide-enter-content grid grid-cols-2 gap-3 md:grid-cols-3'>
           {skills.map((skill) => (
             <div
               key={skill}

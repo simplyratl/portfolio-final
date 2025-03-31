@@ -53,7 +53,7 @@ function calculateDuration(startDateStr: string, endDateStr: string): string {
 export default function Career() {
   return (
     <div>
-      <ul className='mt-4'>
+      <ul className='slide-enter-content mt-4'>
         {careerItems.map((item) => {
           const startFormatted = format(parseISO(item.startDate), 'MMM yyyy');
           const endFormatted =
