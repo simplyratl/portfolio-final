@@ -105,7 +105,7 @@ export const ProjectCategory = ({
             className='grid grid-cols-1 gap-6 md:grid-cols-2'
           >
             {React.Children.map(children, (child) => (
-              <div>{child}</div>
+              <div className='border-t py-3'>{child}</div>
             ))}
           </motion.div>
         ) : (
