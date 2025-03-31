@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Swiper, SwiperRef } from 'swiper/react';
 import { Mousewheel, Navigation } from 'swiper/modules';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
@@ -12,21 +12,39 @@ export const ProjectCategory = ({
   children,
   viewMode,
 }: ProjectCategoryProps) => {
-  const navigationPrevRef = useRef<HTMLButtonElement>(null);
-  const navigationNextRef = useRef<HTMLButtonElement>(null);
+  const navigationPrevRef = useRef<HTMLButtonElement | null>(null);
+  const navigationNextRef = useRef<HTMLButtonElement | null>(null);
   const [showNavigation, setShowNavigation] = useState(false);
   const swiperRef = useRef<SwiperRef | null>(null);
 
   // Check if navigation should be shown based on slide count
   const updateNavigationVisibility = () => {
-    if (swiperRef.current && swiperRef.current.swiper.params.slidesPerView) {
+    if (swiperRef.current?.swiper) {
       const swiper = swiperRef.current.swiper;
-      // Show navigation only if there are more slides than visible slides
       setShowNavigation(
         swiper.slides.length > Number(swiper.params.slidesPerView)
       );
     }
   };
+
+  // Ensure navigation refs are assigned after Swiper is initialized
+  useEffect(() => {
+    if (
+      swiperRef.current?.swiper &&
+      navigationPrevRef.current &&
+      navigationNextRef.current
+    ) {
+      const swiper = swiperRef.current.swiper;
+
+      // Check if navigation is an object before assigning refs
+      if (typeof swiper.params.navigation === 'object') {
+        swiper.params.navigation.prevEl = navigationPrevRef.current;
+        swiper.params.navigation.nextEl = navigationNextRef.current;
+        swiper.navigation.init();
+        swiper.navigation.update();
+      }
+    }
+  }, [swiperRef.current, navigationPrevRef.current, navigationNextRef.current]);
 
   return (
     <div className='mb-12'>
@@ -104,15 +122,22 @@ export const ProjectCategory = ({
               spaceBetween={24}
               slidesPerView={1}
               navigation={{
-                prevEl: navigationPrevRef.current,
-                nextEl: navigationNextRef.current,
+                prevEl: null, // Initially null
+                nextEl: null, // Initially null
                 disabledClass: 'opacity-30 cursor-not-allowed',
               }}
-              onBeforeInit={(swiper) => {
-                // @ts-expect-error - Swiper types issue
-                swiper.params.navigation.prevEl = navigationPrevRef.current;
-                // @ts-expect-error - Swiper types issue
-                swiper.params.navigation.nextEl = navigationNextRef.current;
+              onSwiper={(swiper) => {
+                // Assign navigation refs after Swiper is initialized
+                if (
+                  navigationPrevRef.current &&
+                  navigationNextRef.current &&
+                  typeof swiper.params.navigation === 'object'
+                ) {
+                  swiper.params.navigation.prevEl = navigationPrevRef.current;
+                  swiper.params.navigation.nextEl = navigationNextRef.current;
+                  swiper.navigation.init();
+                  swiper.navigation.update();
+                }
               }}
               onInit={updateNavigationVisibility}
               onBreakpoint={updateNavigationVisibility}
