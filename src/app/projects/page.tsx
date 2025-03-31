@@ -1,5 +1,5 @@
 import PageWrapper from '@/components/shared/PageWrapper';
-import ProjectShowcase from '@/components/blocks/home/ProjectShowcase';
+import ProjectShowcase from '@/components/blocks/projects/ProjectShowcase';
 
 export default function Page() {
   return (
