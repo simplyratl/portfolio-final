@@ -1,11 +1,11 @@
 'use client';
 
 import { allBlogs } from 'contentlayer2/generated';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import PageWrapper from '@/components/shared/PageWrapper';
 import { useState } from 'react';
+import PrefetchLink from '@/components/shared/PrefetchLink';
 
 const getAllBlogs = () => {
   return allBlogs;
@@ -57,7 +57,7 @@ export default function Blogs() {
                   onMouseEnter={() => router.prefetch(blog.slug)}
                   className='group/item transition-all'
                 >
-                  <Link
+                  <PrefetchLink
                     href={blog.slug}
                     className='hover:bg-secondary/50 flex w-full items-center gap-2 rounded-lg px-4 py-3 no-underline transition-all'
                   >
@@ -68,7 +68,7 @@ export default function Blogs() {
                       {blog.description}
                     </span>
                     <div className='bg-muted/20 mr-2 h-[1px] flex-1'></div>
-                  </Link>
+                  </PrefetchLink>
                 </li>
               ))}
             </ul>
