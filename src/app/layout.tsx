@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist_Mono, Inter } from 'next/font/google';
 import './globals.css';
-import Header from '@/components/shared/Header';
+import Header from '@/components/shared/header/Header';
 import Providers from '@/components/shared/Providers';
 import { articulatCF } from '@/fonts/articulat/articulat';
 
