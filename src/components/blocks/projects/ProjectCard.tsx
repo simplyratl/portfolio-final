@@ -8,6 +8,7 @@ export const ProjectCard = ({
   description,
   link,
   isExternal = false,
+  icon,
 }: ProjectCardProps) => (
   <div className='group h-full'>
     {isExternal ? (
@@ -21,16 +22,30 @@ export const ProjectCard = ({
           title={title}
           description={description}
           isExternal={isExternal}
+          link={link}
+          icon={icon}
         />
       </a>
-    ) : (
+    ) : link ? (
       <Link href={link} className='block h-full'>
         <ProjectContent
           title={title}
           description={description}
           isExternal={isExternal}
+          link={link}
+          icon={icon}
         />
       </Link>
+    ) : (
+      <div className='block h-full'>
+        <ProjectContent
+          title={title}
+          description={description}
+          isExternal={isExternal}
+          link={link}
+          icon={icon}
+        />
+      </div>
     )}
   </div>
 );

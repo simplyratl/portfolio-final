@@ -1,9 +1,14 @@
-export type ProjectCardProps = {
+import { JSX } from 'react';
+
+export type Project = {
   title: string;
   description: string;
-  link: string;
+  link?: string;
   isExternal?: boolean;
+  icon?: JSX.Element;
 };
+
+export type ProjectCardProps = Project;
 
 export type ProjectCategoryProps = {
   title: string;
@@ -11,6 +16,6 @@ export type ProjectCategoryProps = {
   viewMode: 'grid' | 'list';
 };
 
-export type ProjectContentProps = Omit<ProjectCardProps, 'link'>;
+export type ProjectContentProps = ProjectCardProps;
 
 export type ViewMode = 'grid' | 'list';
