@@ -37,7 +37,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
 
   return (
     <main>
-      <article className='slide-enter-content'>
+      <article className='slide-enter-content pb-10'>
         <h1 className='articulat-cf text-3xl font-semibold'>{blog.title}</h1>
         <p className='articulat-cf text-muted mt-3 font-medium'>
           {format(blog.date, 'MMMM dd yyyy')}

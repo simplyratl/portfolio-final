@@ -10,10 +10,13 @@ import ToggleTheme from '../ToggleTheme';
 import PrefetchLink from '@/components/shared/PrefetchLink';
 import { AnimatePresence, motion } from 'motion/react';
 import MobileNavigation from '@/components/shared/header/MobileNavigation';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 export default function Header() {
   const MENU_OPEN_WIDTH = 768;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const handleMenuToggle = () => {
     if (window.innerWidth >= MENU_OPEN_WIDTH) return;
@@ -37,7 +40,6 @@ export default function Header() {
         <Logo className='size-8' />
       </PrefetchLink>
 
-      {/* Mobile menu button */}
       <motion.button
         className='relative z-50 md:hidden'
         onClick={handleMenuToggle}
@@ -75,7 +77,10 @@ export default function Header() {
           {navLinks.map((link) => (
             <PrefetchLink
               href={link.href}
-              className='hover:bg-secondary text-muted/80 flex h-8 items-center rounded-lg px-4 text-sm transition-colors duration-150 hover:text-black dark:hover:text-white'
+              className={cn(
+                'hover:bg-secondary text-muted/80 flex h-8 items-center rounded-lg px-4 text-sm transition-colors duration-150 hover:text-black dark:hover:text-white',
+                pathname === link.href && 'text-black dark:text-white'
+              )}
               key={link.label}
             >
               {link.label}

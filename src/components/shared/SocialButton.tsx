@@ -84,6 +84,7 @@ export default function SocialButton({ social, className }: Props) {
         ref={scope}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        aria-label={`Open ${social.name} in a new tab`}
       >
         <a
           href={social.url}

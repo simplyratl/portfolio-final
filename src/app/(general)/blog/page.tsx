@@ -34,23 +34,22 @@ export default function Blogs() {
     <PageWrapper
       title='Blog'
       className='slide-enter-content'
-      description='My thoughts and ideas'
+      description='Thoughts, insights, and technical deep dives'
     >
-      <div className={cn('grid grid-cols-1 gap-2 transition-opacity')}>
+      <div className='grid grid-cols-1 gap-6'>
         {sortedYears.map((year) => (
           <div
             key={year}
             className={cn(
-              'slide-enter-content group/list relative space-y-1 transition-all duration-200',
-              hoveredYear && hoveredYear !== year
-                ? 'sm:opacity-30'
-                : 'opacity-100'
+              'group relative space-y-3 transition-opacity',
+              hoveredYear && hoveredYear !== year ? 'opacity-60' : 'opacity-100'
             )}
             onMouseEnter={() => setHoveredYear(year)}
             onMouseLeave={() => setHoveredYear(null)}
           >
-            <hr className='border-muted/20 border-t' />
-            <ul className='w-[91%]'>
+            <hr className='border-muted/20' />
+            <h2 className='text-muted/50 text-lg font-semibold'>{year}</h2>
+            <ul className='space-y-2'>
               {groupedByYear[year].map((blog) => (
                 <li
                   key={blog.slug}
@@ -59,22 +58,19 @@ export default function Blogs() {
                 >
                   <PrefetchLink
                     href={blog.slug}
-                    className='hover:bg-secondary/50 flex w-full items-center gap-2 rounded-lg px-4 py-3 no-underline transition-all'
+                    className='hover:bg-secondary/50 block rounded-lg px-4 py-3 transition-all'
+                    aria-label={`Read ${blog.title}`}
                   >
-                    <span className='articulat-cf text-muted/80 group-hover/item:!text-foreground font-semibold transition-all'>
+                    <h3 className='articulat-cf text-lg font-medium'>
                       {blog.title}
-                    </span>
-                    <span className='text-muted/50 hidden text-sm md:block'>
+                    </h3>
+                    <p className='text-muted/80 mt-1 text-sm'>
                       {blog.description}
-                    </span>
-                    <div className='bg-muted/20 mr-2 h-[1px] flex-1'></div>
+                    </p>
                   </PrefetchLink>
                 </li>
               ))}
             </ul>
-            <h2 className='text-muted/50 absolute top-1/2 right-4 mb-4 -translate-y-1/2 text-sm'>
-              {year}
-            </h2>
           </div>
         ))}
       </div>

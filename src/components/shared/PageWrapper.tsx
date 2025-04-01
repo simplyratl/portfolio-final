@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '@/lib/utils';
 
 type Props = {
   title: string;
@@ -13,7 +14,7 @@ export default function PageWrapper({
   className,
 }: Props) {
   return (
-    <main className={className}>
+    <main className={cn('pb-10', className)}>
       <div className='space-y-1.5'>
         <h1 className='text-accent articulat-cf text-3xl font-bold'>{title}</h1>
         {description && <p className='text-muted/70'>{description}</p>}

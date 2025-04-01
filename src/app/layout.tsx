@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist_Mono, Inter } from 'next/font/google';
 import './globals.css';
-import Header from '@/components/shared/header/Header';
 import Providers from '@/components/shared/Providers';
 import { articulatCF } from '@/fonts/articulat/articulat';
 
@@ -30,12 +29,7 @@ export default function RootLayout({
       <body
         className={`${interFont.variable} ${geistMono.variable} ${articulatCF.variable} antialiased`}
       >
-        <Providers>
-          <div className='mx-auto max-w-screen-md px-4 pt-6 pb-10'>
-            <Header />
-            <div className='mt-10'>{children}</div>
-          </div>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

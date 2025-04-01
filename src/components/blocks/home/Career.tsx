@@ -65,7 +65,7 @@ export default function Career() {
           return (
             <li key={item.title} className='mb-4 flex items-center gap-3'>
               <div>
-                <h4 className='text'>{item.title}</h4>
+                <h3 className='text'>{item.title}</h3>
                 <div className='text-muted'>
                   <span>{item.company}</span>
                   <span className='mx-1'>•</span>
