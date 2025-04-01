@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
       {
         hostname: 'nikicaraznatovic-portfolio.s3.eu-central-1.amazonaws.com',
       },
+      {
+        hostname: '*',
+      },
     ],
   },
 };

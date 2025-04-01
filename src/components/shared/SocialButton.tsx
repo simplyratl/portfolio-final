@@ -92,7 +92,7 @@ export default function SocialButton({ social, className }: Props) {
           rel='noopener noreferrer'
           aria-label={`${social.name} profile`}
         >
-          <div className='[&_svg]:!size-4'>{social.icon}</div>
+          <div className='[&_svg]:!size-5'>{social.icon}</div>
         </a>
 
         <motion.a
