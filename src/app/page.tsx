@@ -7,10 +7,7 @@ export default function Home() {
           <p className='text-muted'>Frontend Engineer</p>
         </div>
 
-        <a
-          href='mailto:work@nikicaraznatovic.me'
-          className='text-primary hover:underline'
-        >
+        <a href='mailto:work@nikicaraznatovic.me' className='link'>
           work@nikicaraznatovic.me
         </a>
       </div>
