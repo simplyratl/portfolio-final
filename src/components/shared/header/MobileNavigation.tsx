@@ -139,26 +139,6 @@ export default function MobileNavigation({ handleMenuToggle }: Props) {
               onClick={() => handleLinkClick(link.href)}
             >
               {link.label}
-
-              {/* Link-specific highlight animation with AnimatePresence */}
-              <AnimatePresence>
-                {activeLink === link.href && (
-                  <motion.div
-                    className='border-primary absolute inset-0 rounded-lg border-2'
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{
-                      opacity: [0, 0.8, 0],
-                      scale: [0.95, 1.05, 0.95],
-                    }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 1.5,
-                      ease: 'easeInOut',
-                    }}
-                  />
-                )}
-              </AnimatePresence>
             </Link>
           </motion.div>
         ))}
