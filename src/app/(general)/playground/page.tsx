@@ -18,7 +18,7 @@ export default function Page() {
             target='_blank'
             rel='noopener noreferrer'
             aria-label={`Open ${item.title} in a new tab`}
-            className='group border-border/20 hover:border-accent/20 hover:shadow-accent/5 from-card relative h-80 overflow-hidden rounded-3xl border bg-gradient-to-b to-transparent p-6 transition-shadow hover:shadow-lg'
+            className='group border-border/20 hover:border-accent/20 hover:shadow-accent/5 from-card relative h-80 overflow-hidden rounded-3xl border bg-gradient-to-b to-transparent p-6 transition-shadow hover:shadow-lg sm:h-[60vw] md:h-80'
           >
             <div className='absolute inset-0 z-0'>
               <div className='from-background/90 via-background/90 absolute inset-0 z-10 bg-gradient-to-t via-20% to-transparent to-60%' />
