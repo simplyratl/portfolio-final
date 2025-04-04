@@ -1,8 +1,15 @@
 import Footer from '@/components/shared/Footer';
-import PrefetchLink from '@/components/shared/PrefetchLink';
-import { ArrowRight } from 'lucide-react';
+import { projects } from '@/constants/projects';
+import HomeShowcaseCard from '@/components/blocks/home/HomeShowcaseCard';
+import { allBlogs } from 'contentlayer2/generated';
 
 export default function Home() {
+  const blogs = allBlogs?.slice(0, 3).map((blog) => ({
+    title: blog.title,
+    url: blog.slug,
+    description: blog.description,
+  }));
+
   return (
     <div className='slide-enter-content flex h-[calc(100vh-120px)] flex-col justify-between'>
       <div className='flex-1'>
@@ -29,21 +36,15 @@ export default function Home() {
             performance-driven web applications.
           </p>
           <p>Currently, I’m a Frontend Engineer at Coreit.</p>
+        </div>
 
-          <div className='flex gap-4'>
-            <PrefetchLink
-              href='/projects'
-              className='link flex items-center gap-1'
-            >
-              View My Projects <ArrowRight className='size-4' />
-            </PrefetchLink>
-            <PrefetchLink
-              href='/about'
-              className='link flex items-center gap-1'
-            >
-              Learn More <ArrowRight className='size-4' />
-            </PrefetchLink>
-          </div>
+        <div className='mt-10 grid grid-cols-3 gap-12'>
+          <HomeShowcaseCard
+            title='Projects'
+            items={projects.workProjects.slice(0, 3)}
+            viewAllUrl='/projects'
+          />
+          <HomeShowcaseCard title='Blog' items={blogs} viewAllUrl='/blogs' />
         </div>
       </div>
 
