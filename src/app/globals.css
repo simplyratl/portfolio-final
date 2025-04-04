@@ -92,7 +92,7 @@
   --secondary: oklch(0.274 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.742 0 0);
-  --muted-foreground: oklch(0.705 0 0);
+  --muted-foreground: oklch(0.764 0 89.876);
   --accent: oklch(0.784 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
@@ -119,7 +119,11 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+
+  ::selection {
+    @apply bg-muted/20 text-muted-foreground;
   }
 
   .link {
