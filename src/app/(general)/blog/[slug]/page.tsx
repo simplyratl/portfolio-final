@@ -49,7 +49,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
       <div className='group/article'>
         <article className='slide-enter-content pb-10'>
           <div>
-            <h1 className='articulat-cf text-4xl font-semibold'>
+            <h1 className='articulat-cf text-shadow-muted text-4xl font-semibold text-shadow-2xs/30'>
               {blog.title}
             </h1>
             <div className='text-muted mt-3 flex items-center gap-1 font-medium'>
@@ -82,9 +82,9 @@ export default async function BlogPage({ params }: BlogPageProps) {
           </div>
         </article>
 
-        <div className='group/toc fixed top-24 left-4'>
-          <SquareMenu className='text-muted/40 group-hover/toc:text-muted-foreground/80' />
-          {blog.toc && (
+        {blog.toc && (
+          <div className='group/toc fixed top-24 left-4'>
+            <SquareMenu className='text-muted/40 group-hover/toc:text-muted-foreground/80 hidden xl:block' />
             <aside>
               <nav
                 className='hidden max-h-[75vh] w-70 overflow-auto opacity-0 transition-opacity duration-300 ease-in-out group-hover/article:opacity-100 hover:opacity-100 xl:block'
@@ -115,8 +115,8 @@ export default async function BlogPage({ params }: BlogPageProps) {
                 </ul>
               </nav>
             </aside>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </main>
   );

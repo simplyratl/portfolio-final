@@ -21,8 +21,6 @@ export default function Page() {
             className='group border-border/20 hover:border-accent/20 hover:shadow-accent/5 from-card relative h-80 overflow-hidden rounded-3xl border bg-gradient-to-b to-transparent p-6 transition-shadow hover:shadow-lg sm:h-[60vw] md:h-80'
           >
             <div className='absolute inset-0 z-0'>
-              <div className='from-background/90 via-background/90 absolute inset-0 z-10 bg-gradient-to-t via-20% to-transparent to-60%' />
-              <div className='from-background/20 absolute inset-0 z-10 bg-gradient-to-b to-transparent to-20%' />
               <div className='relative h-full w-full overflow-hidden'>
                 <Image
                   src={item.image}
@@ -30,11 +28,7 @@ export default function Page() {
                   fill
                   sizes='(max-width: 768px) 100vw, 50vw'
                   priority
-                  className='object-cover opacity-100 will-change-transform'
-                  style={{
-                    transform: 'scale(1)',
-                    transition: 'transform 300ms ease-out',
-                  }}
+                  className='mask-b-from-10% object-cover'
                 />
               </div>
             </div>
@@ -63,7 +57,7 @@ export default function Page() {
                     {item.description}
                   </p>
 
-                  <div className='bg-background/70 rounded-full p-2 backdrop-blur-sm transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1'>
+                  <div className='bg-primary/70 text-primary-foreground rounded-full p-2 backdrop-blur-sm transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1'>
                     <ArrowRightUpIcon className='size-4' />
                   </div>
                 </div>

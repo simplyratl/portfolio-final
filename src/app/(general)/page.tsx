@@ -8,7 +8,7 @@ export default function Home() {
       <div className='flex-1'>
         <div className='inline-flex flex-col sm:flex sm:flex-row sm:items-center sm:justify-between'>
           <div>
-            <h1 className='articulat-cf text-3xl font-bold'>
+            <h1 className='articulat-cf text-shadow-muted text-3xl font-bold text-shadow-2xs/30'>
               Nikica Ražnatović
             </h1>
             <p className='text-muted'>Frontend Engineer | UI Specialist</p>
