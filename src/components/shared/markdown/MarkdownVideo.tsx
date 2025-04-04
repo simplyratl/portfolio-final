@@ -128,8 +128,8 @@ function MarkdownVideo({ src, className }: BlogVideoProps) {
         animate={{
           scale: !isHovering ? 1 : 0.8,
           opacity: !isHovering ? 1 : 0,
-          y: 0,
-          x: !isHovering ? 0 : 4,
+          y: !isHovering ? 0 : 2,
+          x: !isHovering ? 0 : 12,
         }}
         transition={{ duration: 0.16 }}
       >

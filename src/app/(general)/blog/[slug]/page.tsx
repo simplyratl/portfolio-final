@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import MarkdownVideo from '@/components/shared/markdown/MarkdownVideo';
-import { cn } from '@/lib/utils';
+import { calculateReadTime, cn } from '@/lib/utils';
 import { SquareMenu } from 'lucide-react';
 
 type BlogPageProps = {
@@ -37,13 +37,6 @@ export default async function BlogPage({ params }: BlogPageProps) {
   const { slug } = await params;
   const blog = await getDocFromParams(slug);
 
-  const calculateReadTime = () => {
-    const AVERAGE_READING_SPEED = 250; // words per minute
-    const words = blog.body.raw.split(/\s+/).length;
-    const minutes = Math.ceil(words / AVERAGE_READING_SPEED);
-    return `${minutes} min read`;
-  };
-
   return (
     <main className='mx-auto max-w-[650px] font-sans'>
       <div className='group/article'>
@@ -57,7 +50,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
                 {format(blog.date, 'MMMM dd yyyy')}
               </p>
               <span>·</span>
-              <p className='articulat-cf'>{calculateReadTime()}</p>
+              <p className='articulat-cf'>{calculateReadTime(blog.body.raw)}</p>
             </div>
           </div>
           <div className='mt-10'>

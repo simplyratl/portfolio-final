@@ -2,7 +2,7 @@
 
 import { allBlogs } from 'contentlayer2/generated';
 import { useRouter } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import { calculateReadTime, cn } from '@/lib/utils';
 import PageWrapper from '@/components/shared/PageWrapper';
 import { useState } from 'react';
 import PrefetchLink from '@/components/shared/PrefetchLink';
@@ -61,12 +61,20 @@ export default function Blogs() {
                     className='hover:bg-secondary/50 block rounded-lg px-4 py-3 transition-all'
                     aria-label={`Read ${blog.title}`}
                   >
-                    <h3 className='articulat-cf text-md font-medium'>
-                      {blog.title}
-                    </h3>
-                    <p className='text-muted/80 mt-1 text-sm'>
-                      {blog.description}
-                    </p>
+                    <div className='flex justify-between'>
+                      <div>
+                        <h3 className='articulat-cf text-md font-medium'>
+                          {blog.title}
+                        </h3>
+                        <p className='text-muted/80 mt-1 text-sm'>
+                          {blog.description}
+                        </p>
+                      </div>
+
+                      <p className='articulat-cf text-muted/70 hidden text-sm sm:block'>
+                        {calculateReadTime(blog.body.raw)}
+                      </p>
+                    </div>
                   </PrefetchLink>
                 </li>
               ))}
