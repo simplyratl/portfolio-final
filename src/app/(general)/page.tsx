@@ -1,5 +1,6 @@
 import Footer from '@/components/shared/Footer';
 import PrefetchLink from '@/components/shared/PrefetchLink';
+import { ArrowRight } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -30,11 +31,17 @@ export default function Home() {
           <p>Currently, I’m a Frontend Engineer at Coreit.</p>
 
           <div className='flex gap-4'>
-            <PrefetchLink href='/projects' className='link'>
-              View My Projects →
+            <PrefetchLink
+              href='/projects'
+              className='link flex items-center gap-1'
+            >
+              View My Projects <ArrowRight className='size-4' />
             </PrefetchLink>
-            <PrefetchLink href='/about' className='link'>
-              Learn More →
+            <PrefetchLink
+              href='/about'
+              className='link flex items-center gap-1'
+            >
+              Learn More <ArrowRight className='size-4' />
             </PrefetchLink>
           </div>
         </div>

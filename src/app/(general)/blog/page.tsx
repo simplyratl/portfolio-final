@@ -61,7 +61,7 @@ export default function Blogs() {
                     className='hover:bg-secondary/50 block rounded-lg px-4 py-3 transition-all'
                     aria-label={`Read ${blog.title}`}
                   >
-                    <h3 className='articulat-cf text-lg font-medium'>
+                    <h3 className='articulat-cf text-md font-medium'>
                       {blog.title}
                     </h3>
                     <p className='text-muted/80 mt-1 text-sm'>
