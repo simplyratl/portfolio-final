@@ -85,7 +85,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
         {blog.toc && (
           <div className='group/toc fixed top-24 left-4'>
             <SquareMenu className='text-muted/40 group-hover/toc:text-muted-foreground/80 hidden xl:block' />
-            <aside>
+            <aside className='mt-2'>
               <nav
                 className='hidden max-h-[75vh] w-70 overflow-auto opacity-0 transition-opacity duration-300 ease-in-out group-hover/article:opacity-100 hover:opacity-100 xl:block'
                 aria-label='Table of Contents'

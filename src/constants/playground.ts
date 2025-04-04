@@ -13,7 +13,7 @@ export const playground: Playground[] = [
     description: 'A game where you can craft anything you want.',
     location: 'https://boundless-crafting.nikicaraznatovic.me/',
     image:
-      'https://wallpapers.com/images/hd/neon-astronaut-illustration-dlu9524yzqjb9zjd.jpg',
+      'https://static.vecteezy.com/system/resources/thumbnails/015/734/724/small_2x/astronaut-colorful-glowing-spacial-astro-vintage-poster-lost-in-space-galaxy-voyager-shining-astronaut-on-space-vector.jpg',
     video:
       'https://nikicaraznatovic-portfolio.s3.eu-central-1.amazonaws.com/boundless-crafting/boundless+crafting.mp4',
     tags: ['Game', 'React', 'Canvas'],
