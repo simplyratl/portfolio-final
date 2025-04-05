@@ -2,6 +2,7 @@ import Footer from '@/components/shared/Footer';
 import { projects } from '@/constants/projects';
 import HomeShowcaseCard from '@/components/blocks/home/HomeShowcaseCard';
 import { allBlogs } from 'contentlayer2/generated';
+import { playground } from '@/constants/playground';
 
 export default function Home() {
   const blogs = allBlogs?.slice(0, 3).map((blog) => ({
@@ -10,8 +11,15 @@ export default function Home() {
     description: blog.description,
   }));
 
+  const playgrounds = playground.map((playground) => ({
+    title: playground.title,
+    url: playground.location,
+    description: playground.description,
+    isExternal: true,
+  }));
+
   return (
-    <div className='slide-enter-content flex h-[calc(100vh-120px)] flex-col justify-between'>
+    <div className='slide-enter-content flex h-[calc(100vh-120px)] flex-col justify-between gap-12'>
       <div className='flex-1'>
         <div className='inline-flex flex-col sm:flex sm:flex-row sm:items-center sm:justify-between'>
           <div>
@@ -38,13 +46,18 @@ export default function Home() {
           <p>Currently, I’m a Frontend Engineer at Coreit.</p>
         </div>
 
-        <div className='mt-10 grid grid-cols-3 gap-12'>
+        <div className='slide-enter-content mt-10 grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-3'>
           <HomeShowcaseCard
             title='Projects'
             items={projects.workProjects.slice(0, 3)}
             viewAllUrl='/projects'
           />
-          <HomeShowcaseCard title='Blog' items={blogs} viewAllUrl='/blogs' />
+          <HomeShowcaseCard title='Blog' items={blogs} viewAllUrl='/blog' />
+          <HomeShowcaseCard
+            title='Playground'
+            items={playgrounds}
+            viewAllUrl='/playground'
+          />
         </div>
       </div>
 
