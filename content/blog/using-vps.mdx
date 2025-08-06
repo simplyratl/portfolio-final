@@ -1,0 +1,131 @@
+---
+title: Why I Don't Deploy to Vercel Anymore
+description: Or how I learned to stop worrying and love my VPS
+date: 2025-8-6
+---
+
+## The Great Migration of 2024
+
+Picture this: You're happily deploying to Vercel, living your best serverless life, when suddenly your monthly bill arrives looking like a small country's GDP.
+Your hobby project that gets three visitors (your mom, your dog, and that one confused person who clicked the wrong link) somehow racked up charges that would make Jeff Bezos do a double-take.
+
+That was my wake-up call.
+After years of being a loyal citizen of the Vercel nation and occasionally vacationing in Netlify-land, I've packed my bags and moved to greener (and significantly cheaper) pastures: my own VPS on Hetzner, managed with the delightfully straightforward Dokploy.
+
+## The Problem with Paradise
+
+Don't get me wrong—Vercel and Netlify are fantastic platforms.
+They're like that friend who always picks up the check at dinner: incredibly generous until you realize you're going to have to return the favor eventually, and it's going to hurt.
+
+### The Pricing Predicament
+
+Vercel's pricing model is like a subscription service for breathing air.
+Sure, the first few breaths are free, but once you start _really_ breathing (you know, like a normal human), suddenly you owe them your firstborn child and possibly a kidney.
+
+I personaly never had a problem with billing on Vercel, but I've read so many stories about people just casually
+posting a student project or personal app, not optimizing it for Vercel, and then _boom_. You owe more money to Vercel
+than the whole debt of your country.
+
+Also, when you figure out that Vercel uses AWS and is just a simplified UI for AWS services, which of course
+is more expensive than doing it yourself.
+
+### The Vendor Lock-in Tango
+
+Then there's the subtle dance of vendor lock-in.
+You start innocent enough, using standard deployment practices.
+But then you discover Edge Functions!
+And Serverless Functions!
+And before you know it, you're so deeply integrated into their ecosystem that leaving would require a team of archaeologists and possibly divine intervention.
+
+Netlify wasn't much better.
+Their free tier is generous until it isn't, and their pricing jumps feel like going from riding a bicycle to piloting the International Space Station—technically both are forms of transportation, but the complexity and cost are in entirely different universes.
+
+## Enter the Hero: Hetzner + Dokploy
+
+After spending more time calculating deployment costs than actually coding (which is saying something, considering how much time I spend debugging), I decided to take matters into my own hands.
+Enter Hetzner, the German hosting provider that's basically the no-nonsense older sibling of the hosting world.
+
+### Why Hetzner?
+
+Hetzner's pricing is refreshingly straightforward.
+No mysterious multipliers, no "contact sales for enterprise pricing," no need to sacrifice a goat under a full moon to understand your bill.
+You want a VPS?
+Here's the price.
+You want more RAM?
+Here's what that costs.
+Revolutionary concept, really.
+
+Their servers are located in Germany, Finland and US, which means they're probably powered by renewable energy and engineered with the kind of Germanic precision that makes Swiss watches look sloppy.
+Plus, at €4.15 per month for a decent VPS, I can run multiple projects for less than what I was paying for a single Vercel project that occasionally sent emails.
+
+### The Dokploy Difference
+
+Now, managing a VPS traditionally means becoming best friends with SSH, Docker commands, and various deployment scripts that look like they were written by someone who really, really doesn't want you to understand what they do.
+
+Dokploy changes this game entirely.
+It's like having a personal DevOps engineer who never sleeps, never complains, and doesn't judge you for deploying on Friday afternoons (we've all been there).
+
+The setup process is beautifully simple:
+
+1. Spin up a Hetzner VPS
+2. Run the Dokploy installation script
+3. Connect your repositories
+4. Deploy with the confidence of someone who actually knows what they're doing
+
+Well I did skip a few steps, setting up the domain, DNS, securing the server, VPN, because you don't want your
+neighbour stealing going through your Dokploy projects, but you get the point.
+
+Dokploy gives you a clean, intuitive dashboard that makes deployment feel less like rocket science and more like... well, still science, but maybe high school chemistry instead of quantum physics.
+
+## The Liberation
+
+The freedom is intoxicating.
+I can deploy as many times as I want without calculating whether each deployment is costing me more than my morning coffee.
+I can run background jobs without wondering if I'm accidentally funding someone's yacht.
+I can actually _use_ my applications without fear of bankruptcy.
+
+### Performance Perks
+
+Here's the kicker: performance actually _improved_.
+Turns out, when your application isn't bouncing through seventeen different serverless functions just to serve a static page, things load faster.
+Who could have predicted this shocking development?
+
+My build times went from "enough time to make a sandwich and question my life choices" to "barely enough time to take a sip of coffee."
+The consistent environment means no more mysterious production bugs that only happen in Vercel's special snowflake serverless environment.
+
+## The Learning Curve (It's More of a Gentle Slope)
+
+Now, I won't lie and say this transition was entirely painless.
+Moving from the hand-holding comfort of managed platforms to a VPS does require some additional knowledge.
+But thanks to Dokploy's excellent documentation and intuitive interface, the learning curve is more like a gentle hill than Mount Everest.
+
+The biggest adjustment was remembering that I actually _can_ fix things when they break, instead of just refreshing the Vercel dashboard and hoping their mysterious algorithms sort themselves out.
+
+The problem I had before mine little DevOps adventure, is that I'm primarily a frontend engineer.
+I don't usually mess around with networks, servers etc. But I was curious can I find a solution that works for me,
+is kind of easy to implement and doesn't require me an AWS certificate to setup an application.
+
+## The Economics of Happiness
+
+Let's talk numbers, because numbers don't lie (unlike my estimates for how long development projects will take).
+My monthly hosting costs went from a variable amount that fluctuated like cryptocurrency prices to a predictable 6.49€.
+That's less than what I spend on fancy coffee in a single day, and you get your own server for a whole month for this price!?!?!
+
+This predictability is worth its weight in gold.
+No more surprise bills that make me question whether I accidentally became a Vercel shareholder overnight.
+No more careful monitoring of function invocations like I'm tracking some rare and expensive commodity.
+
+## Conclusion: Freedom Isn't Free (But It's Pretty Affordable)
+
+Making the switch from Vercel and Netlify to a Hetzner VPS with Dokploy has been one of those rare technical decisions that actually made my life better instead of just more complicated.
+
+I still recommend Vercel and Netlify for certain use cases—if you're building a quick prototype, need zero-config deployment, or are working at a company where the hosting costs are someone else's problem, they're excellent choices.
+But for personal projects and small businesses where cost predictability matters, the VPS route offers compelling advantages.
+
+The combination of Hetzner's reasonable pricing and Dokploy's user-friendly deployment management creates a sweet spot that's both economical and practical.
+It's like finding that perfect apartment: affordable rent, great location, and a landlord who actually fixes things when they break.
+
+So here I am, happily deploying from my German VPS, paying predictable monthly fees, and sleeping soundly knowing that my hobby project won't accidentally cost more than my car payment.
+It's a good place to be.
+
+_Now, if you'll excuse me, I need to go deploy something just because I can do it without checking my bank account first._

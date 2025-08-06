@@ -50,34 +50,39 @@ export default function Blogs() {
             <hr className='border-muted/20' />
             <h2 className='text-muted/50 text-lg font-semibold'>{year}</h2>
             <ul className='space-y-2'>
-              {groupedByYear[year].map((blog) => (
-                <li
-                  key={blog.slug}
-                  onMouseEnter={() => router.prefetch(blog.slug)}
-                  className='group/item transition-all'
-                >
-                  <PrefetchLink
-                    href={blog.slug}
-                    className='hover:bg-secondary/50 block rounded-lg px-4 py-3 transition-all'
-                    aria-label={`Read ${blog.title}`}
+              {groupedByYear[year]
+                .sort(
+                  (a, b) =>
+                    new Date(b.date).getTime() - new Date(a.date).getTime()
+                )
+                .map((blog) => (
+                  <li
+                    key={blog.slug}
+                    onMouseEnter={() => router.prefetch(blog.slug)}
+                    className='group/item transition-all'
                   >
-                    <div className='flex justify-between'>
-                      <div>
-                        <h3 className='articulat-cf text-md font-medium'>
-                          {blog.title}
-                        </h3>
-                        <p className='text-muted/80 mt-1 text-sm'>
-                          {blog.description}
+                    <PrefetchLink
+                      href={blog.slug}
+                      className='hover:bg-secondary/50 block rounded-lg px-4 py-3 transition-all'
+                      aria-label={`Read ${blog.title}`}
+                    >
+                      <div className='flex justify-between'>
+                        <div>
+                          <h3 className='articulat-cf text-md font-medium'>
+                            {blog.title}
+                          </h3>
+                          <p className='text-muted/80 mt-1 text-sm'>
+                            {blog.description}
+                          </p>
+                        </div>
+
+                        <p className='articulat-cf text-muted/70 hidden text-sm sm:block'>
+                          {calculateReadTime(blog.body.raw)}
                         </p>
                       </div>
-
-                      <p className='articulat-cf text-muted/70 hidden text-sm sm:block'>
-                        {calculateReadTime(blog.body.raw)}
-                      </p>
-                    </div>
-                  </PrefetchLink>
-                </li>
-              ))}
+                    </PrefetchLink>
+                  </li>
+                ))}
             </ul>
           </div>
         ))}
