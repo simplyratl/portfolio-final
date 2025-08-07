@@ -67,6 +67,10 @@ export const Blog = defineDocumentType(() => ({
       type: 'string',
       required: false,
     },
+    aiSummary: {
+      type: 'string',
+      required: false,
+    },
   },
   computedFields,
 }));

@@ -5,11 +5,14 @@ import { allBlogs } from 'contentlayer2/generated';
 import { playground } from '@/constants/playground';
 
 export default function Home() {
-  const blogs = allBlogs?.slice(0, 3).map((blog) => ({
-    title: blog.title,
-    url: blog.slug,
-    description: blog.description,
-  }));
+  const blogs = allBlogs
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    ?.slice(0, 3)
+    .map((blog) => ({
+      title: blog.title,
+      url: blog.slug,
+      description: blog.description,
+    }));
 
   const playgrounds = playground.map((playground) => ({
     title: playground.title,

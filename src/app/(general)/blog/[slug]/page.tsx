@@ -1,11 +1,12 @@
+import AiSummarize from '@/components/blocks/blogs/ai-summarizer';
+import MarkdownVideo from '@/components/shared/markdown/MarkdownVideo';
 import { Mdx } from '@/components/shared/markdown/MDXComponent';
+import { calculateReadTime, cn } from '@/lib/utils';
 import { allBlogs } from 'contentlayer2/generated';
 import { format } from 'date-fns';
-import { notFound } from 'next/navigation';
-import Image from 'next/image';
-import MarkdownVideo from '@/components/shared/markdown/MarkdownVideo';
-import { calculateReadTime, cn } from '@/lib/utils';
 import { SquareMenu } from 'lucide-react';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
 
 type BlogPageProps = {
   params: Promise<{ slug: string }>;
@@ -39,6 +40,8 @@ export default async function BlogPage({ params }: BlogPageProps) {
 
   return (
     <main className='mx-auto max-w-[650px] font-sans'>
+      <AiSummarize aiSummary={blog.aiSummary} />
+
       <div className='group/article'>
         <article className='slide-enter-content pb-10'>
           <div>
