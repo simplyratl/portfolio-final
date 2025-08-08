@@ -51,7 +51,7 @@ export default function HomeShowcaseCard({
   className,
 }: Props) {
   return (
-    <div className={cn(className)}>
+    <div className={cn(className, 'relative overflow-hidden rounded-md p-4')}>
       <div className='flex items-center justify-between'>
         <h2 className='text-accent'>{title}</h2>
         {viewAllUrl && (

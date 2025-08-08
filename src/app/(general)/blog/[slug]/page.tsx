@@ -1,4 +1,3 @@
-import AiSummarize from '@/components/blocks/blogs/ai-summarizer';
 import MarkdownVideo from '@/components/shared/markdown/MarkdownVideo';
 import { Mdx } from '@/components/shared/markdown/MDXComponent';
 import { calculateReadTime, cn } from '@/lib/utils';
@@ -40,8 +39,6 @@ export default async function BlogPage({ params }: BlogPageProps) {
 
   return (
     <main className='mx-auto max-w-[650px] font-sans'>
-      <AiSummarize aiSummary={blog.aiSummary} />
-
       <div className='group/article'>
         <article className='slide-enter-content pb-10'>
           <div>
