@@ -37,7 +37,10 @@ export default function ProjectShowcase() {
 
     if (viewMode === 'list') {
       return projectList.map((project, i) => (
-        <SwiperSlide key={`${project.title}-${i}`}>
+        <SwiperSlide
+          key={`${project.title}-${i}`}
+          className='hover:border-accent/30 relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-4 shadow-sm backdrop-blur-md transition-colors dark:border-white/10 dark:bg-white/5'
+        >
           <ProjectCard {...project} />
         </SwiperSlide>
       ));

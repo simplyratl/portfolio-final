@@ -16,7 +16,7 @@ export const ProjectCard = ({
         href={link}
         target='_blank'
         rel='noopener noreferrer'
-        className='group block h-full'
+        className='group block h-full transition-transform duration-200 will-change-transform hover:-translate-y-0.5'
       >
         <ProjectContent
           title={title}
@@ -27,7 +27,10 @@ export const ProjectCard = ({
         />
       </a>
     ) : link ? (
-      <Link href={link} className='block h-full'>
+      <Link
+        href={link}
+        className='block h-full transition-transform duration-200 will-change-transform hover:-translate-y-0.5'
+      >
         <ProjectContent
           title={title}
           description={description}
@@ -37,7 +40,7 @@ export const ProjectCard = ({
         />
       </Link>
     ) : (
-      <div className='block h-full'>
+      <div className='block h-full transition-transform duration-200 will-change-transform hover:-translate-y-0.5'>
         <ProjectContent
           title={title}
           description={description}

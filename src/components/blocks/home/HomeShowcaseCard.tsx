@@ -51,7 +51,12 @@ export default function HomeShowcaseCard({
   className,
 }: Props) {
   return (
-    <div className={cn(className, 'relative overflow-hidden rounded-md p-4')}>
+    <div
+      className={cn(
+        className,
+        'hover:border-accent/40 relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-5 shadow-sm backdrop-blur-md transition-colors dark:border-white/10 dark:bg-white/5'
+      )}
+    >
       <div className='flex items-center justify-between'>
         <h2 className='text-accent'>{title}</h2>
         {viewAllUrl && (
@@ -65,7 +70,7 @@ export default function HomeShowcaseCard({
         )}
       </div>
 
-      <ul className='slide-enter-content mt-4'>
+      <ul className='slide-enter-content mt-4 divide-y divide-white/10 dark:divide-white/5'>
         {items.map((project) => (
           <li key={project.title} className='py-4 sm:h-20 sm:p-0 md:h-30'>
             <ShowcaseLink {...project} />

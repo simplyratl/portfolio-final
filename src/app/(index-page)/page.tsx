@@ -5,6 +5,7 @@ import { allBlogs } from 'contentlayer2/generated';
 import { playground } from '@/constants/playground';
 import Image from 'next/image';
 import * as motion from 'motion/react-client';
+import { BackgroundGradient } from '@/components/shared/BackgroundGradient';
 
 export default function Home() {
   const blogs = allBlogs
@@ -76,18 +77,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className='absolute inset-0 z-[-1] h-[840px] overflow-hidden'>
-        <div>
-          <Image
-            fill
-            src='/1920.webp'
-            alt='Nikica Ražnatović'
-            className='opacity-50 blur-2xl dark:opacity-30'
-          />
-        </div>
-        <div className='absolute inset-0 h-full w-full bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--color-background)_90%)]' />
-        <div className='to-background absolute inset-0 h-full w-full bg-gradient-to-b from-transparent' />
-      </div>
+      <BackgroundGradient imagePath='/1920.webp' />
 
       <div className='mx-auto max-w-screen-md'>
         <Footer />
