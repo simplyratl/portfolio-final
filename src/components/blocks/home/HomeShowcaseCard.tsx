@@ -54,10 +54,15 @@ export default function HomeShowcaseCard({
     <div
       className={cn(
         className,
-        'hover:border-accent/40 relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-5 shadow-sm backdrop-blur-md transition-colors dark:border-white/10 dark:bg-white/5'
+        'group/card relative overflow-hidden rounded-2xl border border-transparent p-5 transition-colors hover:border-black/20 hover:bg-black/5 hover:dark:border-white/10 hover:dark:bg-white/5'
       )}
     >
-      <div className='flex items-center justify-between'>
+      <div className='bg-background/40 absolute inset-0 z-[0] rounded-xl dark:m-0.5' />
+      <div className='dark:from-border absolute inset-0 z-[-1] rounded-xl bg-gradient-to-b to-transparent' />
+
+      <div className='via-primary absolute top-[80%] left-0 h-20 w-[1px] bg-gradient-to-b from-transparent to-transparent opacity-0 transition-all duration-500 ease-in-out group-hover/card:top-[20%] group-hover/card:opacity-100' />
+
+      <div className='z-50 flex items-center justify-between'>
         <h2 className='text-accent'>{title}</h2>
         {viewAllUrl && (
           <PrefetchLink
@@ -70,9 +75,12 @@ export default function HomeShowcaseCard({
         )}
       </div>
 
-      <ul className='slide-enter-content mt-4 divide-y divide-white/10 dark:divide-white/5'>
+      <ul className='slide-enter-content divide-y divide-white/10'>
         {items.map((project) => (
-          <li key={project.title} className='py-4 sm:h-20 sm:p-0 md:h-30'>
+          <li
+            key={project.title}
+            className='flex h-30 flex-col justify-center sm:p-0'
+          >
             <ShowcaseLink {...project} />
             {project.description && (
               <p className='text-muted mt-2 line-clamp-2 text-sm'>

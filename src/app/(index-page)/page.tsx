@@ -4,7 +4,6 @@ import Footer from '@/components/shared/Footer';
 import { playground } from '@/constants/playground';
 import { projects } from '@/constants/projects';
 import { allBlogs } from 'contentlayer2/generated';
-import * as motion from 'motion/react-client';
 
 export default function Home() {
   const blogs = allBlogs
@@ -52,16 +51,6 @@ export default function Home() {
         </div>
 
         <div className='slide-enter-content relative mt-10 grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4'>
-          <div className='bg-background/40 absolute inset-0 z-[0] m-0.5 rounded-xl' />
-          <div className='from-border absolute inset-0 z-[-1] rounded-xl to-transparent dark:bg-gradient-to-b' />
-          <motion.div
-            initial={{ opacity: 0, top: '80%' }}
-            animate={{ opacity: 1, top: '20%' }}
-            exit={{ opacity: 0, top: '80%' }}
-            transition={{ delay: 1, ease: 'easeInOut' }}
-            className='via-primary absolute left-0 h-20 w-[1px] bg-gradient-to-b from-transparent to-transparent transition-all duration-500 ease-in-out dark:left-[-1px]'
-          ></motion.div>
-
           <HomeShowcaseCard
             title='Projects'
             items={projects.workProjects.slice(0, 3)}
@@ -78,7 +67,7 @@ export default function Home() {
 
       <BackgroundGradient imagePath='/1920.webp' />
 
-      <div className='mx-auto max-w-screen-md'>
+      <div className='mx-auto w-full max-w-screen-md'>
         <Footer />
       </div>
     </div>
