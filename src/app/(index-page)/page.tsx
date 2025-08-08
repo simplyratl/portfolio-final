@@ -1,11 +1,10 @@
-import Footer from '@/components/shared/Footer';
-import { projects } from '@/constants/projects';
 import HomeShowcaseCard from '@/components/blocks/home/HomeShowcaseCard';
-import { allBlogs } from 'contentlayer2/generated';
-import { playground } from '@/constants/playground';
-import Image from 'next/image';
-import * as motion from 'motion/react-client';
 import { BackgroundGradient } from '@/components/shared/BackgroundGradient';
+import Footer from '@/components/shared/Footer';
+import { playground } from '@/constants/playground';
+import { projects } from '@/constants/projects';
+import { allBlogs } from 'contentlayer2/generated';
+import * as motion from 'motion/react-client';
 
 export default function Home() {
   const blogs = allBlogs
