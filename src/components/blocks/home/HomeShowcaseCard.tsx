@@ -67,7 +67,7 @@ export default function HomeShowcaseCard({
         {viewAllUrl && (
           <PrefetchLink
             href={viewAllUrl}
-            className='link text-muted hover:text-primary flex items-center gap-2 text-sm'
+            className='link text-muted hover:text-primary z-10 flex items-center gap-2 text-sm'
           >
             All
             <ArrowRightUpIcon className='size-4' />
@@ -79,7 +79,7 @@ export default function HomeShowcaseCard({
         {items.map((project) => (
           <li
             key={project.title}
-            className='flex h-30 flex-col justify-center sm:p-0'
+            className='flex h-26 flex-col justify-center sm:p-0'
           >
             <ShowcaseLink {...project} />
             {project.description && (
