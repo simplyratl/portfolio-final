@@ -15,4 +15,8 @@ export const navLinks = [
     href: '/playground',
     label: 'Playground',
   },
+  {
+    href: '/ai',
+    label: 'AI',
+  },
 ];

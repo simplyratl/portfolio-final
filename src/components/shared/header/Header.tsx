@@ -12,6 +12,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import MobileNavigation from '@/components/shared/header/MobileNavigation';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 export default function Header() {
   const MENU_OPEN_WIDTH = 768;

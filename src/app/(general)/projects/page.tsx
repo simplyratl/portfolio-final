@@ -1,8 +1,8 @@
 'use client';
 
-import { projects, skillCategories } from '@/constants/projects';
-import { cn } from '@/lib/utils';
 import PageWrapper from '@/components/shared/PageWrapper';
+import { projects } from '@/constants/projects';
+import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
 const groupProjectsByCategory = () => {
@@ -21,7 +21,6 @@ const groupProjectsByCategory = () => {
 const getProjectStats = () => {
   const totalProjects = projects.length;
   const categories = [...new Set(projects.map((p) => p.category))];
-  const technologies = [...new Set(projects.flatMap((p) => p.technologies))];
   const roles = [...new Set(projects.map((p) => p.role))];
 
   return {
@@ -33,9 +32,6 @@ const getProjectStats = () => {
 
 export default function Projects() {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
-  const [selectedSkillCategory, setSelectedSkillCategory] = useState<
-    string | null
-  >(null);
   const groupedProjects = groupProjectsByCategory();
   const stats = getProjectStats();
 
@@ -155,8 +151,8 @@ export default function Projects() {
             and user experience.
           </p>
           <p className='mt-2'>
-            From banking systems handling millions of transactions to government
-            platforms serving thousands of users daily.
+            From banking systems handling thousands of transactions to
+            government platforms serving thousands of users daily.
           </p>
         </div>
       </div>
