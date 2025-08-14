@@ -3,7 +3,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import PageWrapper from '@/components/shared/PageWrapper';
-import { Send, Bot, User, Sparkles } from 'lucide-react';
+import TurnstileComponent, {
+  TurnstileRef,
+} from '@/components/shared/Turnstile';
+import { Send, Bot, User, Sparkles, AlertCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { projects } from '@/constants/projects';
 
@@ -93,8 +96,23 @@ export default function AIChat() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showSampleQuestions, setShowSampleQuestions] = useState(true);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [rateLimitInfo, setRateLimitInfo] = useState<{
+    remaining: number;
+    resetTime?: string;
+  } | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const turnstileRef = useRef<TurnstileRef>(null);
+
+  const isDev = process.env.NODE_ENV === 'development';
+  const siteKey = process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY;
+  const isTestKey = siteKey === '0x4AAAAAABruqZFL2YL5mOaM' || 
+                   siteKey === '1x00000000000000000000AA' ||
+                   siteKey === '2x00000000000000000000AB' ||
+                   siteKey === '3x00000000000000000000FF';
+  const hasTurnstileKey = !!siteKey && !isTestKey;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -107,12 +125,36 @@ export default function AIChat() {
   const handleSampleQuestion = (question: string) => {
     setInput(question);
     setShowSampleQuestions(false);
+    setError(null);
     inputRef.current?.focus();
+  };
+
+  const handleTurnstileSuccess = (token: string) => {
+    setTurnstileToken(token);
+    setError(null);
+  };
+
+  const handleTurnstileError = () => {
+    setError(
+      'Security verification failed. Please refresh the page and try again.'
+    );
+    setTurnstileToken(null);
+  };
+
+  const handleTurnstileExpire = () => {
+    setTurnstileToken(null);
+    // Automatically trigger a new verification
+    if (turnstileRef.current) {
+      turnstileRef.current.reset();
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
+
+    // Clear any previous errors
+    setError(null);
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -138,11 +180,41 @@ export default function AIChat() {
             content: m.content,
           })),
           context: PORTFOLIO_CONTEXT,
+          turnstileToken: turnstileToken,
         }),
       });
 
+      // Update rate limit info from headers
+      const remaining = response.headers.get('X-RateLimit-Remaining');
+      const resetTime = response.headers.get('X-RateLimit-Reset');
+
+      if (remaining) {
+        setRateLimitInfo({
+          remaining: parseInt(remaining),
+          resetTime: resetTime || undefined,
+        });
+      }
+
       if (!response.ok) {
-        throw new Error('Failed to get response');
+        const errorData = await response.json();
+
+        if (response.status === 429) {
+          setError(
+            'Too many requests. Please wait a few minutes before trying again.'
+          );
+        } else if (response.status === 403) {
+          setError(
+            errorData.error || 'Security verification failed. Please try again.'
+          );
+          // Reset Turnstile on security failure
+          if (turnstileRef.current) {
+            turnstileRef.current.reset();
+          }
+          setTurnstileToken(null);
+        } else {
+          throw new Error(errorData.error || 'Failed to get response');
+        }
+        return;
       }
 
       const data = await response.json();
@@ -157,7 +229,18 @@ export default function AIChat() {
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+
+      // Reset Turnstile token after successful use
+      setTurnstileToken(null);
+      if (turnstileRef.current) {
+        turnstileRef.current.reset();
+      }
     } catch (error) {
+      console.error('Chat error:', error);
+      setError(
+        error instanceof Error ? error.message : 'An unexpected error occurred'
+      );
+
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         content:
@@ -186,6 +269,18 @@ export default function AIChat() {
       description="Too lazy to scroll through the portfolio? Just ask me anything about Nikica's work, experience, or skills!"
     >
       <div className='mx-auto max-w-4xl'>
+        {/* Development Status Indicator */}
+        {isDev && !hasTurnstileKey && (
+          <div className='mb-6 flex items-center gap-2 rounded-lg bg-blue-50 p-3 text-sm text-blue-700 dark:bg-blue-900/20 dark:text-blue-400'>
+            <AlertCircle className='h-4 w-4 flex-shrink-0' />
+            <span>
+              Development mode: Cloudflare Turnstile is disabled. Add
+              NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY to enable bot
+              protection.
+            </span>
+          </div>
+        )}
+
         {showSampleQuestions && (
           <div className='animate-in fade-in mb-8 duration-500'>
             <div className='mb-4 flex items-center justify-center gap-2'>
@@ -207,7 +302,6 @@ export default function AIChat() {
           </div>
         )}
 
-        {/* Chat Messages - No Card, Clean Layout */}
         <div className='space-y-6'>
           {messages.map((message) => (
             <div
@@ -330,6 +424,34 @@ export default function AIChat() {
 
         {/* Input Area - Clean, Minimal */}
         <div className='sticky bottom-4 mt-8'>
+          {/* Error Display */}
+          {error && (
+            <div className='mb-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-400'>
+              <AlertCircle className='h-4 w-4 flex-shrink-0' />
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Rate Limit Info */}
+          {rateLimitInfo && rateLimitInfo.remaining <= 3 && (
+            <div className='mb-4 flex items-center gap-2 rounded-lg bg-amber-50 p-3 text-sm text-amber-700 dark:bg-amber-900/20 dark:text-amber-400'>
+              <AlertCircle className='h-4 w-4 flex-shrink-0' />
+              <span>
+                {rateLimitInfo.remaining} requests remaining in this session
+              </span>
+            </div>
+          )}
+
+          {/* Turnstile Component - Hidden */}
+          <div className='hidden'>
+            <TurnstileComponent
+              ref={turnstileRef}
+              onVerify={handleTurnstileSuccess}
+              onError={handleTurnstileError}
+              onExpire={handleTurnstileExpire}
+            />
+          </div>
+
           <form onSubmit={handleSubmit} className='flex gap-3'>
             <input
               ref={inputRef}
