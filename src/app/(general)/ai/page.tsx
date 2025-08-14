@@ -108,10 +108,11 @@ export default function AIChat() {
 
   const isDev = process.env.NODE_ENV === 'development';
   const siteKey = process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY;
-  const isTestKey = siteKey === '0x4AAAAAABruqZFL2YL5mOaM' || 
-                   siteKey === '1x00000000000000000000AA' ||
-                   siteKey === '2x00000000000000000000AB' ||
-                   siteKey === '3x00000000000000000000FF';
+  const isTestKey =
+    siteKey === '0x4AAAAAABruqZFL2YL5mOaM' ||
+    siteKey === '1x00000000000000000000AA' ||
+    siteKey === '2x00000000000000000000AB' ||
+    siteKey === '3x00000000000000000000FF';
   const hasTurnstileKey = !!siteKey && !isTestKey;
 
   const scrollToBottom = () => {
