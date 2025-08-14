@@ -14,6 +14,24 @@ interface Message {
   timestamp: Date;
 }
 
+function getAge({
+  birthYear,
+  birthMonth,
+  birthDay,
+}: {
+  birthYear: number;
+  birthMonth: number;
+  birthDay: number;
+}) {
+  const today = new Date();
+  let age = today.getFullYear() - birthYear;
+  const hasHadBirthday =
+    today.getMonth() > birthMonth ||
+    (today.getMonth() === birthMonth && today.getDate() >= birthDay);
+  if (!hasHadBirthday) age--;
+  return age;
+}
+
 const INITIAL_MESSAGE: Message = {
   id: '0',
   content:
@@ -30,6 +48,9 @@ BACKGROUND:
 - Notable clients include NLB Bank, Dukley Hotels, Resorts and Apartments, the Government of Montenegro, and the Court of Montenegro
 - Currently working at Coreit, primarily using Vue.js for large-scale applications
 - Has been in programming since high school but has started professionally in ${new Date().getFullYear() - 2020}
+- Frontend Engineer based in Podgorica, Montenegro; available for freelance work.
+- Third year of Information Technology from the University of Mediterranean
+- Is currently ${getAge({ birthYear: 2001, birthMonth: 10, birthDay: 29 })} years old.
 
 TECHNICAL SKILLS:
 Frontend Development: Vue.js, Next.js, React, TypeScript, Tailwind CSS, Component Libraries
