@@ -25,8 +25,8 @@ export default function Home() {
   return (
     <div className='slide-enter-content flex h-[calc(100vh-120px)] flex-col justify-between gap-12'>
       <div className='flex-1'>
-        <div className='mx-auto inline-flex max-w-screen-md flex-col sm:flex sm:flex-row sm:items-center sm:justify-between'>
-          <div className='px-4'>
+        <div className='mx-auto inline-flex max-w-screen-md flex-col px-4 sm:flex sm:flex-row sm:items-center sm:justify-between'>
+          <div>
             <h1 className='articulat-cf text-shadow-muted text-3xl font-bold text-shadow-2xs/30'>
               Nikica Ražnatović
             </h1>

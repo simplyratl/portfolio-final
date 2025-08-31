@@ -21,12 +21,10 @@ const groupProjectsByCategory = () => {
 const getProjectStats = () => {
   const totalProjects = projects.length;
   const categories = [...new Set(projects.map((p) => p.category))];
-  const roles = [...new Set(projects.map((p) => p.role))];
 
   return {
     totalProjects,
     categories: categories.length,
-    roles: roles.length,
   };
 };
 
@@ -35,7 +33,6 @@ export default function Projects() {
   const groupedProjects = groupProjectsByCategory();
   const stats = getProjectStats();
 
-  // Filter out empty categories
   const categoriesWithProjects = Object.entries(groupedProjects).filter(
     ([_, projects]) => projects.length > 0
   );
@@ -53,7 +50,7 @@ export default function Projects() {
           internal tools where specific implementation details remain private.
         </p>
 
-        <div className='my-8 grid grid-cols-2 gap-4 sm:grid-cols-3'>
+        <div className='my-8 grid grid-cols-2 gap-4'>
           <div className='text-center'>
             <div className='text-foreground text-2xl font-bold'>
               {stats.totalProjects}
@@ -65,12 +62,6 @@ export default function Projects() {
               {stats.categories}
             </div>
             <div className='text-muted/70 text-sm'>Industries</div>
-          </div>
-          <div className='text-center'>
-            <div className='text-foreground text-2xl font-bold'>
-              {stats.roles}
-            </div>
-            <div className='text-muted/70 text-sm'>Role Types</div>
           </div>
         </div>
       </div>

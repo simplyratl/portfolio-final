@@ -342,12 +342,12 @@ export default function AIChat() {
                             </p>
                           ),
                           ul: ({ children }) => (
-                            <ul className='ml-4 space-y-1 text-sm'>
+                            <ul className='marker:text-foreground ml-4 space-y-1 text-sm'>
                               {children}
                             </ul>
                           ),
                           ol: ({ children }) => (
-                            <ol className='ml-4 space-y-1 text-sm'>
+                            <ol className='marker:text-foreground ml-4 space-y-1 text-sm'>
                               {children}
                             </ol>
                           ),
