@@ -6,7 +6,7 @@ type Props = {
 
 export function BackgroundGradient({ imagePath }: Props) {
   return (
-    <div className='absolute inset-0 z-[-1] h-[840px] overflow-hidden'>
+    <div className='absolute inset-0 z-[-5] h-[840px] overflow-hidden'>
       <div>
         <Image
           fill

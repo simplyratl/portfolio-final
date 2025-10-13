@@ -105,6 +105,8 @@ export default function AIChat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const turnstileRef = useRef<TurnstileRef>(null);
+  const isStreamingRef = useRef(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const isDev = process.env.NODE_ENV === 'development';
   const siteKey = process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY;
@@ -115,12 +117,30 @@ export default function AIChat() {
     siteKey === '3x00000000000000000000FF';
   const hasTurnstileKey = !!siteKey && !isTestKey;
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
+    messagesEndRef.current?.scrollIntoView({ behavior });
   };
 
+  // Smooth scroll during streaming with throttling
   useEffect(() => {
-    scrollToBottom();
+    if (isStreamingRef.current) {
+      // Throttle scroll updates during streaming
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      scrollTimeoutRef.current = setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+      }, 100);
+    } else {
+      // Smooth scroll when not streaming
+      scrollToBottom('smooth');
+    }
+
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
   }, [messages]);
 
   const handleSampleQuestion = (question: string) => {
@@ -218,18 +238,51 @@ export default function AIChat() {
         return;
       }
 
-      const data = await response.json();
-
+      // Create a placeholder message for streaming
+      const assistantMessageId = (Date.now() + 1).toString();
       const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content:
-          data.content ||
-          "I'm sorry, I couldn't process that request. Please try again.",
+        id: assistantMessageId,
+        content: '',
         role: 'assistant',
         timestamp: new Date(),
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+
+      // Handle streaming response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let accumulatedContent = '';
+
+      if (reader) {
+        isStreamingRef.current = true; // Start streaming mode
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value);
+            accumulatedContent += chunk;
+
+            // Update the assistant message with new content
+            setMessages((prev) => {
+              const updated = prev.slice(0, -1); // Remove last message
+              return [
+                ...updated,
+                {
+                  ...assistantMessage,
+                  content: accumulatedContent,
+                },
+              ];
+            });
+          }
+        } catch (streamError) {
+          console.error('Stream reading error:', streamError);
+          throw new Error('Failed to read streaming response');
+        } finally {
+          isStreamingRef.current = false; // End streaming mode
+        }
+      }
 
       // Reset Turnstile token after successful use
       setTurnstileToken(null);

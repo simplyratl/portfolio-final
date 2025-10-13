@@ -44,7 +44,7 @@ const ToggleTheme = ({ className }: Props) => {
       <button
         ref={scope}
         className={cn(
-          'border-muted/30 bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:shadow-primary size-8 rounded-xl border px-1.5 transition-all hover:shadow-[0px_0px_50px_10px]',
+          'border-muted/30 bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:shadow-primary shadow-s size-8 rounded-xl border px-1.5 transition-all hover:shadow-[0px_0px_50px_10px]',
           className
         )}
         aria-label='Toggle theme'

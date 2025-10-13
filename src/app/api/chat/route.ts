@@ -147,13 +147,14 @@ information about Nikica Ražnatović. No exceptions.
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: systemPrompt },
           ...messages.slice(-10),
         ],
         max_tokens: 500,
         temperature: 0.7,
+        stream: true, // Enable streaming
       }),
     });
 
@@ -161,22 +162,64 @@ information about Nikica Ražnatović. No exceptions.
       throw new Error('OpenAI API request failed');
     }
 
-    const data = await response.json();
-    const aiResponse =
-      data.choices[0]?.message?.content ||
-      "I'm sorry, I couldn't process that request.";
+    // Create a TransformStream to handle the streaming response
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
 
-    return NextResponse.json(
-      {
-        content: aiResponse,
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          const reader = response.body?.getReader();
+          if (!reader) {
+            controller.close();
+            return;
+          }
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value);
+            const lines = chunk
+              .split('\n')
+              .filter((line) => line.trim() !== '');
+
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6);
+                if (data === '[DONE]') {
+                  controller.close();
+                  return;
+                }
+
+                try {
+                  const parsed = JSON.parse(data);
+                  const content = parsed.choices[0]?.delta?.content;
+                  if (content) {
+                    controller.enqueue(encoder.encode(content));
+                  }
+                } catch (e) {
+                  // Skip invalid JSON
+                }
+              }
+            }
+          }
+          controller.close();
+        } catch (error) {
+          controller.error(error);
+        }
       },
-      {
-        headers: {
-          'X-RateLimit-Limit': RATE_LIMIT.maxRequests.toString(),
-          'X-RateLimit-Remaining': remaining.toString(),
-        },
-      }
-    );
+    });
+
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
+        'X-RateLimit-Limit': RATE_LIMIT.maxRequests.toString(),
+        'X-RateLimit-Remaining': remaining.toString(),
+      },
+    });
   } catch (error) {
     console.error('Chat API error:', error);
 

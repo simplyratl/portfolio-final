@@ -1,18 +1,17 @@
 'use client';
 
+import MobileNavigation from '@/components/shared/header/MobileNavigation';
 import Logo from '@/components/shared/Logo';
+import PrefetchLink from '@/components/shared/PrefetchLink';
+import SocialButton from '@/components/shared/SocialButton';
 import { navLinks } from '@/constants/nav-links';
 import { socials } from '@/constants/socials';
-import SocialButton from '@/components/shared/SocialButton';
-import { useEffect, useState } from 'react';
-import { Menu, X } from 'lucide-react';
-import ToggleTheme from '../ToggleTheme';
-import PrefetchLink from '@/components/shared/PrefetchLink';
-import { AnimatePresence, motion } from 'motion/react';
-import MobileNavigation from '@/components/shared/header/MobileNavigation';
-import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { Menu, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import ToggleTheme from '../ToggleTheme';
 
 export default function Header() {
   const MENU_OPEN_WIDTH = 768;

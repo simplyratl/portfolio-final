@@ -65,6 +65,7 @@ export default function Home() {
         </div>
       </div>
 
+      <div className='from-background pointer-events-none absolute top-0 left-0 z-[-1] h-50 w-full bg-gradient-to-b to-transparent'></div>
       <BackgroundGradient imagePath='/1920.webp' />
 
       <div className='mx-auto w-full max-w-screen-md px-4'>
