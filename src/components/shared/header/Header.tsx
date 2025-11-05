@@ -74,18 +74,22 @@ export default function Header() {
       {/* Desktop navigation */}
       <div className='hidden items-center gap-2 md:flex'>
         <nav className='flex gap-1'>
-          {navLinks.map((link) => (
-            <PrefetchLink
-              href={link.href}
-              className={cn(
-                'hover:bg-secondary text-muted/80 flex h-8 items-center rounded-lg px-4 text-sm transition-colors duration-150 hover:text-black dark:hover:text-white',
-                pathname === link.href && 'text-black dark:text-white'
-              )}
-              key={link.label}
-            >
-              {link.label}
-            </PrefetchLink>
-          ))}
+          {navLinks.map((link) => {
+            const Icon = link.icon;
+            return (
+              <PrefetchLink
+                href={link.href}
+                className={cn(
+                  'hover:bg-secondary text-muted/80 flex h-8 items-center gap-2 rounded-lg px-4 text-sm transition-colors duration-150 hover:text-black dark:hover:text-white',
+                  pathname === link.href && 'text-black dark:text-white'
+                )}
+                key={link.label}
+              >
+                {Icon && <Icon className='h-4 w-4' />}
+                {link.label}
+              </PrefetchLink>
+            );
+          })}
         </nav>
 
         <ul className='flex gap-2.5'>

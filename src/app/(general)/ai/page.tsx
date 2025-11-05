@@ -103,7 +103,7 @@ export default function AIChat() {
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const turnstileRef = useRef<TurnstileRef>(null);
   const isStreamingRef = useRef(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -123,6 +123,9 @@ export default function AIChat() {
 
   // Smooth scroll during streaming with throttling
   useEffect(() => {
+    // Skip initial scroll on mount
+    if (messages.length <= 1) return;
+
     if (isStreamingRef.current) {
       // Throttle scroll updates during streaming
       if (scrollTimeoutRef.current) {
@@ -367,7 +370,7 @@ export default function AIChat() {
             >
               {message.role === 'assistant' && (
                 <div className='bg-primary/10 text-primary flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full'>
-                  <Bot className='h-4 w-4' />
+                  <Sparkles className='h-4 w-4' />
                 </div>
               )}
 
@@ -459,20 +462,22 @@ export default function AIChat() {
             </div>
           ))}
 
-          {isLoading && (
-            <div className='flex justify-start gap-4'>
-              <div className='bg-primary/10 text-primary flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full'>
-                <Bot className='h-4 w-4' />
-              </div>
-              <div className='bg-secondary/50 rounded-2xl rounded-bl-md px-4 py-3'>
-                <div className='flex space-x-1'>
-                  <div className='bg-muted/60 h-2 w-2 animate-pulse rounded-full'></div>
-                  <div className='bg-muted/60 h-2 w-2 animate-pulse rounded-full delay-75'></div>
-                  <div className='bg-muted/60 h-2 w-2 animate-pulse rounded-full delay-150'></div>
+          {isLoading &&
+            !isStreamingRef.current &&
+            messages[messages.length - 1]?.role !== 'assistant' && (
+              <div className='flex justify-start gap-4'>
+                <div className='bg-primary/10 text-primary flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full'>
+                  <Sparkles className='h-4 w-4' />
+                </div>
+                <div className='bg-secondary/50 rounded-2xl rounded-bl-md px-4 py-3'>
+                  <div className='flex space-x-1'>
+                    <div className='bg-muted/60 h-2 w-2 animate-pulse rounded-full'></div>
+                    <div className='bg-muted/60 h-2 w-2 animate-pulse rounded-full delay-75'></div>
+                    <div className='bg-muted/60 h-2 w-2 animate-pulse rounded-full delay-150'></div>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
           <div ref={messagesEndRef} />
         </div>
 
@@ -507,20 +512,35 @@ export default function AIChat() {
           </div>
 
           <form onSubmit={handleSubmit} className='flex gap-3'>
-            <input
+            <textarea
               ref={inputRef}
-              type='text'
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSubmit(e);
+                }
+              }}
               placeholder="Ask about Nikica's experience, skills, projects..."
-              className='bg-background/80 border-muted/30 placeholder:text-muted-foreground focus:ring-primary/20 focus:border-primary/40 flex-1 rounded-xl border px-4 py-3 text-sm shadow-sm backdrop-blur-sm focus:ring-2 focus:outline-none'
+              className='bg-background/80 border-muted/30 placeholder:text-muted-foreground focus:ring-primary/20 focus:border-primary/40 max-h-[200px] min-h-[48px] flex-1 resize-none rounded-xl border px-4 py-3 text-sm shadow-sm backdrop-blur-sm focus:ring-2 focus:outline-none'
               disabled={isLoading}
+              rows={1}
+              style={{
+                height: 'auto',
+                minHeight: '48px',
+              }}
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = 'auto';
+                target.style.height = Math.min(target.scrollHeight, 200) + 'px';
+              }}
             />
             <button
               type='submit'
               disabled={!input.trim() || isLoading}
               className={cn(
-                'bg-primary text-primary-foreground hover:bg-primary/90 flex h-12 w-12 items-center justify-center rounded-xl shadow-sm transition-all duration-200 hover:scale-105',
+                'bg-primary text-primary-foreground hover:bg-primary/90 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl shadow-sm transition-all duration-200 hover:scale-105',
                 (!input.trim() || isLoading) &&
                   'cursor-not-allowed opacity-50 hover:scale-100'
               )}

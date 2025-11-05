@@ -63,7 +63,7 @@ export default function HomeShowcaseCard({
       <div className='via-primary absolute top-[80%] left-0 h-20 w-[1px] bg-gradient-to-b from-transparent to-transparent opacity-0 transition-all duration-500 ease-in-out group-hover/card:top-[20%] group-hover/card:opacity-100' />
 
       <div className='z-50 flex items-center justify-between'>
-        <h2 className='text-accent'>{title}</h2>
+        <h2 className='text-black dark:text-white'>{title}</h2>
         {viewAllUrl && (
           <PrefetchLink
             href={viewAllUrl}

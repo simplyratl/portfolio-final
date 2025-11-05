@@ -1,7 +1,7 @@
 'use client';
 
 import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
-import { forwardRef, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
 
 interface TurnstileComponentProps {
   onVerify: (token: string) => void;
@@ -35,21 +35,28 @@ const TurnstileComponent = forwardRef<TurnstileRef, TurnstileComponentProps>(
     }));
 
     // In development mode without site key or with test key, simulate success
-    if (!siteKey || (isDev && isTestKey)) {
-      if (isDev) {
-        console.warn(
-          !siteKey
-            ? 'Cloudflare Turnstile site key not configured - using dev mode'
-            : 'Using test Turnstile key - simulating success in dev mode'
-        );
-        // Simulate a successful verification after a short delay
-        setTimeout(() => {
-          onVerify('dev-mode-token');
-        }, 100);
-      } else {
-        console.error('Cloudflare Turnstile site key not configured');
-        if (onError) onError();
+    useEffect(() => {
+      if (!siteKey || (isDev && isTestKey)) {
+        if (isDev) {
+          console.warn(
+            !siteKey
+              ? 'Cloudflare Turnstile site key not configured - using dev mode'
+              : 'Using test Turnstile key - simulating success in dev mode'
+          );
+          // Simulate a successful verification after a short delay
+          const timer = setTimeout(() => {
+            onVerify('dev-mode-token');
+          }, 100);
+          return () => clearTimeout(timer);
+        } else {
+          console.error('Cloudflare Turnstile site key not configured');
+          if (onError) onError();
+        }
       }
+    }, [siteKey, isDev, isTestKey, onVerify, onError]);
+
+    // Don't render Turnstile in dev mode without proper key
+    if (!siteKey || (isDev && isTestKey)) {
       return null;
     }
 

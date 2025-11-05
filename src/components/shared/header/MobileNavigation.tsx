@@ -51,33 +51,37 @@ export default function MobileNavigation({ handleMenuToggle }: Props) {
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       <nav className='flex flex-col gap-2 p-4'>
-        {navLinks.map((link, index) => (
-          <motion.div
-            key={link.label}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{
-              delay: index * 0.08,
-              duration: 0.4,
-              type: 'spring',
-              stiffness: 120,
-              damping: 14,
-            }}
-          >
-            <Link
-              href={link.href}
-              className={`relative flex h-12 items-center justify-center rounded-lg px-4 text-lg font-medium transition-all ${
-                activeLink === link.href
-                  ? 'text-primary font-bold'
-                  : 'text-muted/80 hover:bg-secondary/50 dark:hover:bg-secondary/50 hover:text-black dark:hover:text-white'
-              } ${isRouteChanging ? 'pointer-events-none' : ''}`}
-              onClick={() => handleLinkClick(link.href)}
+        {navLinks.map((link, index) => {
+          const Icon = link.icon;
+          return (
+            <motion.div
+              key={link.label}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{
+                delay: index * 0.08,
+                duration: 0.4,
+                type: 'spring',
+                stiffness: 120,
+                damping: 14,
+              }}
             >
-              {link.label}
-            </Link>
-          </motion.div>
-        ))}
+              <Link
+                href={link.href}
+                className={`relative flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-lg font-medium transition-all ${
+                  activeLink === link.href
+                    ? 'text-primary font-bold'
+                    : 'text-muted/80 hover:bg-secondary/50 dark:hover:bg-secondary/50 hover:text-black dark:hover:text-white'
+                } ${isRouteChanging ? 'pointer-events-none' : ''}`}
+                onClick={() => handleLinkClick(link.href)}
+              >
+                {Icon && <Icon className='h-5 w-5' />}
+                {link.label}
+              </Link>
+            </motion.div>
+          );
+        })}
       </nav>
 
       <motion.div

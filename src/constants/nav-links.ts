@@ -1,3 +1,5 @@
+import { Sparkles } from 'lucide-react';
+
 export const navLinks = [
   {
     href: '/about',
@@ -17,6 +19,7 @@ export const navLinks = [
   },
   {
     href: '/ai',
-    label: 'AI',
+    label: 'AI Assistant',
+    icon: Sparkles,
   },
 ];
