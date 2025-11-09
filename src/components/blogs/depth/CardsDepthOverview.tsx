@@ -27,7 +27,7 @@ export default function CardsDepthOverview() {
   const [shadow, setShadow] = useState(true);
   return (
     <div>
-      <div className='border-border h-full columns-2 gap-2 space-y-2 rounded-lg border bg-white p-4 dark:bg-black'>
+      <div className='border-border h-full columns-1 gap-2 space-y-2 rounded-lg border bg-white p-4 sm:columns-2 dark:bg-black'>
         <Card className={cn('h-80', { 'shadow-l': shadow })} />
         <Card className='h-20' />
         <Card className='h-42' />
