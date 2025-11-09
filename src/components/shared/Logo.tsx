@@ -14,7 +14,6 @@ export default function Logo(props: SVGProps<SVGSVGElement>) {
   const [shouldSkipInitial, setShouldSkipInitial] = useState(
     hasPlayedInitialAnimation
   );
-  const animationRef = useRef<any>(null);
 
   useEffect(() => {
     if (!hasPlayedInitialAnimation) {
