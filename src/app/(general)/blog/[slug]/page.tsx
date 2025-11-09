@@ -1,5 +1,9 @@
 import MarkdownVideo from '@/components/shared/markdown/MarkdownVideo';
 import { Mdx } from '@/components/shared/markdown/MDXComponent';
+import ReadingProgressBar from '@/components/shared/ReadingProgressBar';
+import RecommendedBlogs from '@/components/blogs/RecommendedBlogs';
+import BlogTransition from '@/components/blogs/BlogTransition';
+import BlogReadingPreferences from '@/components/blogs/BlogReadingPreferences';
 import { calculateReadTime, cn } from '@/lib/utils';
 import { allBlogs } from 'contentlayer2/generated';
 import { format } from 'date-fns';
@@ -33,47 +37,75 @@ async function getDocFromParams(slug: string) {
   return doc;
 }
 
+function getRecommendedBlogs(currentSlug: string) {
+  // Filter out the current blog and get published blogs
+  const otherBlogs = allBlogs.filter(
+    (blog) => blog.slugAsParams !== currentSlug && blog.published
+  );
+
+  // Sort by date (most recent first)
+  const sortedBlogs = otherBlogs.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+
+  // Return 2 most recent blogs
+  return sortedBlogs.slice(0, 2);
+}
+
 export default async function BlogPage({ params }: BlogPageProps) {
   const { slug } = await params;
   const blog = await getDocFromParams(slug);
+  const recommendedBlogs = getRecommendedBlogs(slug);
 
   return (
     <main className='mx-auto max-w-[650px] font-sans'>
+      <ReadingProgressBar />
       <div className='group/article'>
-        <article className='slide-enter-content pb-10'>
-          <div>
-            <h1 className='articulat-cf text-shadow-muted text-4xl font-semibold text-shadow-2xs/30'>
-              {blog.title}
-            </h1>
-            <div className='text-muted mt-3 flex items-center gap-1 font-medium'>
-              <p className='articulat-cf'>
-                {format(blog.date, 'MMMM dd yyyy')}
-              </p>
-              <span>·</span>
-              <p className='articulat-cf'>{calculateReadTime(blog.body.raw)}</p>
-            </div>
-          </div>
-          <div className='mt-10'>
-            <div className='space-y-6'>
-              {blog.mainImage && (
-                <div className='relative h-110 w-full overflow-hidden rounded-xl'>
-                  <Image
-                    src={blog.mainImage}
-                    alt={blog.title}
-                    fill
-                    className='object-cover'
-                  />
+        <BlogTransition>
+          <article className='slide-enter-content pb-10'>
+            <div>
+              <div className='flex items-start justify-between gap-4'>
+                <div className='flex-1'>
+                  <h1 className='articulat-cf text-shadow-muted text-4xl font-semibold text-shadow-2xs/30'>
+                    {blog.title}
+                  </h1>
+                  <div className='text-muted mt-3 flex items-center gap-1 font-medium'>
+                    <p className='articulat-cf'>
+                      {format(blog.date, 'MMMM dd yyyy')}
+                    </p>
+                    <span>·</span>
+                    <p className='articulat-cf'>
+                      {calculateReadTime(blog.body.raw)}
+                    </p>
+                  </div>
                 </div>
-              )}
-
-              {blog.mainVideo && <MarkdownVideo src={blog.mainVideo} />}
+                <BlogReadingPreferences />
+              </div>
             </div>
+            <div className='mt-10'>
+              <div className='space-y-6'>
+                {blog.mainImage && (
+                  <div className='relative h-110 w-full overflow-hidden rounded-xl'>
+                    <Image
+                      src={blog.mainImage}
+                      alt={blog.title}
+                      fill
+                      className='object-cover'
+                    />
+                  </div>
+                )}
 
-            <div className='inter mt-10'>
-              <Mdx code={blog.body.code} />
+                {blog.mainVideo && <MarkdownVideo src={blog.mainVideo} />}
+              </div>
+
+              <div className='blog-content inter mt-10 transition-all duration-300'>
+                <Mdx code={blog.body.code} />
+              </div>
+
+              <RecommendedBlogs blogs={recommendedBlogs} />
             </div>
-          </div>
-        </article>
+          </article>
+        </BlogTransition>
 
         {blog.toc && (
           <div className='group/toc fixed top-24 left-4'>

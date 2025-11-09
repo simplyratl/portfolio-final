@@ -54,7 +54,7 @@ export default function HomeShowcaseCard({
     <div
       className={cn(
         className,
-        'group/card hover:shadow-l border-border relative overflow-hidden rounded-2xl border p-5 transition-all hover:border-zinc-400 dark:hover:border-zinc-600 hover:dark:bg-white/5'
+        'group/card hover:shadow-l border-border hover:dark:bg-muted/20 hover:bg-muted/10 relative overflow-hidden rounded-2xl border p-5 transition-all hover:border-zinc-400 dark:hover:border-zinc-600'
       )}
     >
       <div className='bg-background/40 absolute inset-0 z-[0] rounded-xl dark:m-0.5' />

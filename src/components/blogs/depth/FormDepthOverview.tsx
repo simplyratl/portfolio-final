@@ -24,7 +24,7 @@ export function AppUsageSelect({ depth }: { depth: boolean }) {
   return (
     <Select>
       <SelectTrigger
-        className={cn('w-[180px] sm:w-[280px]', !depth && '!bg-transparent')}
+        className={cn('w-[160px] sm:w-[220px]', !depth && '!bg-transparent')}
       >
         <SelectValue placeholder='Select usage type' />
       </SelectTrigger>
@@ -59,7 +59,7 @@ export function SortBySelect({ depth }: { depth: boolean }) {
   return (
     <Select>
       <SelectTrigger
-        className={cn('w-[180px] sm:w-[280px]', !depth && '!bg-transparent')}
+        className={cn('w-[160px] sm:w-[220px]', !depth && '!bg-transparent')}
       >
         <SelectValue placeholder='Sort by' />
       </SelectTrigger>
@@ -154,14 +154,18 @@ export const FormDepthOverview = () => {
           <div className='flex w-full items-center justify-between gap-4'>
             <div className='flex items-center gap-2'>
               <Grid2x2Check size={18} />
-              <span className='font-semibold'>App Usage</span>
+              <span className='text-sm font-semibold sm:text-base'>
+                App Usage
+              </span>
             </div>
             <AppUsageSelect depth={depth} />
           </div>
           <div className='flex w-full items-center justify-between gap-4'>
             <div className='flex items-center gap-2'>
               <SortDescIcon size={18} />
-              <span className='font-semibold'>Sort by</span>
+              <span className='text-sm font-semibold sm:text-base'>
+                Sort by
+              </span>
             </div>
             <SortBySelect depth={depth} />
           </div>

@@ -89,7 +89,7 @@ export default function Projects() {
             <ul className='space-y-2'>
               {categoryProjects.map((project) => (
                 <li key={project.title} className='group/item transition-all'>
-                  <div className='hover:bg-secondary/50 block rounded-lg px-4 py-3 transition-all'>
+                  <div className='hover:bg-secondary/50 hover:shadow-s block rounded-lg px-4 py-3 transition-all'>
                     <div className='flex items-start justify-between'>
                       <div className='flex-1'>
                         <div className='mb-2 flex items-center gap-3'>

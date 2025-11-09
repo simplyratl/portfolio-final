@@ -523,12 +523,11 @@ export default function AIChat() {
                 }
               }}
               placeholder="Ask about Nikica's experience, skills, projects..."
-              className='bg-background/80 border-muted/30 placeholder:text-muted-foreground focus:ring-primary/20 focus:border-primary/40 max-h-[200px] min-h-[48px] flex-1 resize-none rounded-xl border px-4 py-3 text-sm shadow-sm backdrop-blur-sm focus:ring-2 focus:outline-none'
+              className='bg-background/80 shadow-s border-muted/30 placeholder:text-muted-foreground focus:ring-primary/20 focus:border-primary/40 max-h-[200px] min-h-[68px] flex-1 resize-none rounded-xl border px-4 py-3 text-sm backdrop-blur-sm focus:ring-2 focus:outline-none sm:min-h-[48px]'
               disabled={isLoading}
               rows={1}
               style={{
                 height: 'auto',
-                minHeight: '48px',
               }}
               onInput={(e) => {
                 const target = e.target as HTMLTextAreaElement;
@@ -540,7 +539,7 @@ export default function AIChat() {
               type='submit'
               disabled={!input.trim() || isLoading}
               className={cn(
-                'bg-primary text-primary-foreground hover:bg-primary/90 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl shadow-sm transition-all duration-200 hover:scale-105',
+                'bg-primary text-primary-foreground hover:bg-primary/90 shadow-s flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl transition-all duration-200 hover:scale-105',
                 (!input.trim() || isLoading) &&
                   'cursor-not-allowed opacity-50 hover:scale-100'
               )}

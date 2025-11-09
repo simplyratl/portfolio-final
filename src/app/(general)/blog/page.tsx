@@ -63,7 +63,7 @@ export default function Blogs() {
                   >
                     <PrefetchLink
                       href={blog.slug}
-                      className='hover:bg-secondary/50 block rounded-lg px-4 py-3 transition-all'
+                      className='hover:bg-secondary/50 hover:shadow-s block rounded-lg px-4 py-3 transition-all'
                       aria-label={`Read ${blog.title}`}
                     >
                       <div className='flex justify-between'>

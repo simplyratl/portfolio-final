@@ -80,7 +80,7 @@ export default function Header() {
               <PrefetchLink
                 href={link.href}
                 className={cn(
-                  'hover:bg-secondary text-muted/80 flex h-8 items-center gap-2 rounded-lg px-4 text-sm transition-colors duration-150 hover:text-black dark:hover:text-white',
+                  'hover:bg-secondary hover:shadow-s text-muted/80 flex h-8 items-center gap-2 rounded-lg px-4 text-sm transition-colors duration-150 hover:text-black dark:hover:text-white',
                   pathname === link.href && 'text-black dark:text-white'
                 )}
                 key={link.label}
