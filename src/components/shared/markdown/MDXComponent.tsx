@@ -7,6 +7,8 @@ import { MdxCard } from '@/components/shared/markdown/MdxCard';
 import MarkdownVideo from '@/components/shared/markdown/MarkdownVideo';
 import { cn } from '@/lib/utils';
 import MarkdownImage from '@/components/shared/markdown/MarkdownImage';
+import CardsDepthOverview from '@/components/blogs/depth/CardsDepthOverview';
+import { FormDepthOverview } from '@/components/blogs/depth/FormDepthOverview';
 
 const components = {
   h1: ({ ...props }) => (
@@ -107,6 +109,8 @@ const components = {
   Image: MarkdownImage,
   Card: MdxCard,
   MarkdownVideo,
+  CardsDepthOverview,
+  FormDepthOverview,
 };
 
 interface MdxProps {

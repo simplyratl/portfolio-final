@@ -1,0 +1,52 @@
+---
+title: Depth in UI
+description: Why depth is important
+date: 2025-11-8
+---
+
+Modern UI design isn’t just about organizing elements on a screen. It’s about guiding attention, clarifying hierarchy, and making interfaces feel tangible in a digital space. One of the simplest yet most effective ways to create this sense of depth is by using shadows and highlights, especially when designing for both light and dark modes.
+
+I even applied this technique to this very site. Not everywhere, but selectively, enough to make certain components stand out naturally through subtle depth cues.
+
+### Why Depth Matters
+
+Interfaces without depth can look flat and feel harder to read, especially with today’s high-resolution screens. By shaping elements with light and shadow, you create separation and focus, helping users visually scan information faster.
+
+- **Shadows** lift elements like cards and modals off the background, giving them presence.
+- **Highlights** soften edges and add a sense of physical texture that makes components feel more “real.”
+
+This approach doesn’t just improve aesthetics it also improves usability. When users can instantly perceive what’s interactive or important, your interface feels more intuitive.
+
+### Real-World Example: The Banking Dashboard
+
+Recently, while developing the frontend for a banking system, I encountered a classic depth-related problem.
+
+The clients wanted to see a _lot_ of information at once like tables, charts, transactions, all visible simultaneously. While that worked for them functionally, it made the interface visually busy. Critical sections became harder to distinguish, even when they were at the top of the layout hierarchy.
+
+So how did I fix it? By introducing depth.
+
+Every group of logically related data was placed inside a card, each with a subtle shadow to create separation. Then, for the most important section, I added a slightly stronger shadow and a faint highlight along the top edge. That small change guided the user’s eye exactly where it needed to go.
+
+### Visual Overview
+
+<CardsDepthOverview />
+
+It doesn’t matter what’s inside each card—just by looking, you can tell which one feels more important. That perception comes entirely from lighting and shadow hierarchy.
+
+And once you see it, it’s hard to unsee how much difference a few pixels of shadow can make.
+
+### Another Example: The Form
+
+<FormDepthOverview />
+
+In this case, it wasn't just the shadow and highlights, but adding background to the form, making it more visible.
+
+Adding depth and color accents to form components completely changes how users perceive them. It breaks visual monotony, clarifies structure, and subtly communicates what’s interactive.
+
+Even small depth effects, when used purposefully, can turn a dense, utilitarian layout into something approachable and easier to navigate.
+
+### Closing Thoughts
+
+Depth brings life to flat digital surfaces. With just a few well-placed shadows and highlights, you can shape attention, improve readability, and make your design feel tactile, without overwhelming it.
+
+When used consciously, depth isn’t decoration. It’s communication.
