@@ -19,7 +19,7 @@ export default function Page() {
               target='_blank'
               rel='noopener noreferrer'
               aria-label={`Open ${item.title} in a new tab`}
-              className='group hover:border-accent/30 relative h-80 overflow-hidden rounded-3xl border border-white/20 bg-white/10 p-6 shadow-sm backdrop-blur-md transition-colors hover:shadow-lg sm:h-[60vw] md:h-80 dark:border-white/10 dark:bg-white/5'
+              className='group hover:border-accent/30 hover:shadow-m relative h-80 overflow-hidden rounded-3xl border border-white/20 bg-white/10 p-6 shadow-sm backdrop-blur-md transition-colors sm:h-[60vw] md:h-80 dark:border-white/10 dark:bg-white/5'
             >
               <div className='absolute inset-0 z-0'>
                 <div className='relative h-full w-full overflow-hidden'>

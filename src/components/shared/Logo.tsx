@@ -1,24 +1,31 @@
 'use client';
 
-import type { SVGProps } from 'react';
 import { cn } from '@/lib/utils';
 import { motion } from 'motion/react';
-import { useEffect, useRef, useState } from 'react';
+import type { SVGProps } from 'react';
+import { useEffect, useState } from 'react';
 
 const STROKE_DASH = 430;
-let hasPlayedInitialAnimation = false;
+const ANIMATION_KEY = 'logo-animation-played';
 
 export default function Logo(props: SVGProps<SVGSVGElement>) {
   const [isHovering, setIsHovering] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [shouldSkipInitial, setShouldSkipInitial] = useState(
-    hasPlayedInitialAnimation
-  );
+  // Start with true to match server-side render, then check client-side
+  const [shouldSkipInitial, setShouldSkipInitial] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    if (!hasPlayedInitialAnimation) {
-      hasPlayedInitialAnimation = true;
+    // Check if animation has already been played in this session
+    const hasPlayed = sessionStorage.getItem(ANIMATION_KEY);
+
+    if (hasPlayed) {
+      setShouldSkipInitial(true);
+    } else {
+      setShouldSkipInitial(false);
     }
+
+    setIsInitialized(true);
   }, []);
 
   const handleMouseEnter = () => {
@@ -28,11 +35,20 @@ export default function Logo(props: SVGProps<SVGSVGElement>) {
   };
 
   const handleMouseLeave = () => {
-    setIsHovering(false);
+    if (!isAnimating) {
+      setIsHovering(false);
+    }
   };
 
   const handleAnimationComplete = () => {
     setIsAnimating(false);
+    setIsHovering(false);
+
+    // Mark the initial animation as played after it completes
+    if (isInitialized && !shouldSkipInitial) {
+      sessionStorage.setItem(ANIMATION_KEY, 'true');
+      setShouldSkipInitial(true);
+    }
   };
 
   const getAnimationState = () => {
@@ -47,6 +63,15 @@ export default function Logo(props: SVGProps<SVGSVGElement>) {
         ],
       };
     }
+
+    // Initial animation when component mounts
+    if (isInitialized && !shouldSkipInitial) {
+      return {
+        strokeDashoffset: 0,
+        clipPath: 'inset(0 0 0 0)',
+      };
+    }
+
     return {
       strokeDashoffset: 0,
       clipPath: 'inset(0 0 0 0)',
@@ -84,9 +109,9 @@ export default function Logo(props: SVGProps<SVGSVGElement>) {
                 ease: 'easeInOut',
                 times: [0, 0.3, 0.3, 1],
               }
-            : shouldSkipInitial
-              ? { duration: 0 }
-              : { duration: 1.5, ease: 'easeInOut' }
+            : isInitialized && !shouldSkipInitial
+              ? { duration: 1.5, ease: 'easeInOut' }
+              : { duration: 0 }
         }
         onAnimationComplete={handleAnimationComplete}
       />

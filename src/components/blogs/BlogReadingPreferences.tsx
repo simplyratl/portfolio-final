@@ -164,7 +164,7 @@ export default function BlogReadingPreferences() {
       >
         {/* Font Family Section */}
         <div className='space-y-2'>
-          <label className='text-muted-foreground text-xs font-medium tracking-wider uppercase'>
+          <label className='text-muted-foreground mb-2 block text-xs font-medium tracking-wider uppercase'>
             Font Style
           </label>
           <div className='grid grid-cols-3 gap-2'>
@@ -192,7 +192,7 @@ export default function BlogReadingPreferences() {
 
         {/* Font Size Section */}
         <div className='space-y-2'>
-          <label className='text-muted-foreground text-xs font-medium tracking-wider uppercase'>
+          <label className='text-muted-foreground mb-2 block text-xs font-medium tracking-wider uppercase'>
             Font Size
           </label>
           <div className='grid grid-cols-4 gap-2'>
@@ -220,7 +220,7 @@ export default function BlogReadingPreferences() {
 
         {/* Content Width Section */}
         <div className='space-y-2'>
-          <label className='text-muted-foreground text-xs font-medium tracking-wider uppercase'>
+          <label className='text-muted-foreground mb-2 block text-xs font-medium tracking-wider uppercase'>
             Content Width
           </label>
           <div className='grid grid-cols-3 gap-2'>
