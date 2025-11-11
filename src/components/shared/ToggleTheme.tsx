@@ -123,9 +123,8 @@ const ToggleTheme = ({ className }: Props) => {
     <>
       <button
         ref={(node) => {
-          // @ts-ignore
+          // @ts-expect-error - useAnimate scope ref type mismatch
           scope.current = node;
-          // @ts-ignore
           buttonRef.current = node;
         }}
         className={cn(
