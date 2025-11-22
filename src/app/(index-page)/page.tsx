@@ -38,7 +38,7 @@ export default function Home() {
           </a>
         </div>
 
-        <div className='slide-enter-content mx-auto mt-6 max-w-screen-md space-y-4'>
+        <div className='slide-enter-content mx-auto mt-6 max-w-screen-md space-y-1.5'>
           <p>
             I design and develop functional, detail-oriented user interfaces
             that enhance digital experiences.
