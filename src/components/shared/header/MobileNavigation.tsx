@@ -1,7 +1,7 @@
 'use client';
 
 import { navLinks } from '@/constants/nav-links';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { socials } from '@/constants/socials';
 import SocialButton from '@/components/shared/SocialButton';
@@ -19,6 +19,7 @@ export default function MobileNavigation({ handleMenuToggle }: Props) {
   const nextRouter = useRouter();
   const [isRouteChanging, setIsRouteChanging] = useState(false);
   const [activeLink, setActiveLink] = useState<string | null>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   // Prefetch all navigation routes when mobile menu is opened
   useEffect(() => {
@@ -44,92 +45,174 @@ export default function MobileNavigation({ handleMenuToggle }: Props) {
 
   return (
     <motion.div
-      className='bg-background/95 fixed inset-0 top-0 z-40 flex flex-col pt-20 backdrop-blur-sm md:hidden'
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.98 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
+      className='fixed inset-0 z-40 md:hidden'
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
     >
-      <nav className='flex flex-col gap-2 p-4'>
-        {navLinks.map((link, index) => {
-          const Icon = link.icon;
-          return (
-            <motion.div
-              key={link.label}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{
-                delay: index * 0.08,
-                duration: 0.4,
-                type: 'spring',
-                stiffness: 120,
-                damping: 14,
-              }}
-            >
-              <Link
-                href={link.href}
-                className={`relative flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-lg font-medium transition-all ${
-                  activeLink === link.href
-                    ? 'text-primary font-bold'
-                    : 'text-muted/80 hover:bg-secondary/50 dark:hover:bg-secondary/50 hover:text-black dark:hover:text-white'
-                } ${isRouteChanging ? 'pointer-events-none' : ''}`}
-                onClick={() => handleLinkClick(link.href)}
-              >
-                {Icon && <Icon className='h-5 w-5' />}
-                {link.label}
-              </Link>
-            </motion.div>
-          );
-        })}
-      </nav>
-
+      {/* Backdrop with subtle gradient */}
       <motion.div
-        className='border-muted/20 mt-auto border-t'
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
+        className='absolute inset-0 bg-black/40 dark:bg-black/60'
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={handleMenuToggle}
+        style={{
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+        }}
+      />
+
+      {/* Main menu container - slides from top */}
+      <motion.div
+        className='absolute top-0 right-0 left-0 mx-4 mt-20'
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: -20, opacity: 0 }}
+        transition={{
+          duration: shouldReduceMotion ? 0.15 : 0.35,
+          ease: [0.16, 1, 0.3, 1],
+        }}
       >
-        <ul className='flex justify-center gap-4 p-6'>
-          {socials.map((social, index) => (
-            <motion.li
-              key={social.name}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.4 + index * 0.08,
-                type: 'spring',
-                stiffness: 100,
-                damping: 12,
-              }}
-              whileHover={{
-                scale: 1.15,
-                transition: { duration: 0.2 },
-              }}
-            >
-              <SocialButton
-                social={social}
-                className='text-muted/80 hover:text-foreground text-xl'
-              />
-            </motion.li>
-          ))}
-          <motion.li
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+        {/* Glass card container */}
+        <div className='bg-background/80 dark:bg-background/90 border-border/50 overflow-hidden rounded-3xl border shadow-2xl backdrop-blur-xl'>
+          {/* Navigation links */}
+          <nav className='p-3'>
+            {navLinks.map((link, index) => {
+              const Icon = link.icon;
+              const isActive = activeLink === link.href;
+
+              return (
+                <motion.div
+                  key={link.label}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: shouldReduceMotion ? 0 : index * 0.05,
+                    duration: 0.3,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                >
+                  <Link
+                    href={link.href}
+                    className={`relative flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-200 ${
+                      isActive
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-foreground/70 active:bg-foreground/5'
+                    } ${isRouteChanging ? 'pointer-events-none opacity-50' : ''} `}
+                    onClick={() => handleLinkClick(link.href)}
+                    style={{
+                      WebkitTapHighlightColor: 'transparent',
+                      touchAction: 'manipulation',
+                    }}
+                  >
+                    {/* Icon */}
+                    {Icon && (
+                      <div
+                        className={`flex h-9 w-9 items-center justify-center rounded-xl transition-all duration-200 ${
+                          isActive
+                            ? 'bg-primary/10 text-primary'
+                            : 'bg-foreground/5 text-foreground/60'
+                        } `}
+                      >
+                        <Icon className='h-4 w-4' />
+                      </div>
+                    )}
+
+                    {/* Label */}
+                    <span
+                      className={`text-[15px] transition-all duration-200 ${isActive ? 'font-semibold' : 'font-medium'} `}
+                    >
+                      {link.label}
+                    </span>
+
+                    {/* Active dot indicator */}
+                    {isActive && (
+                      <motion.div
+                        layoutId='activeDot'
+                        className='bg-primary ml-auto h-1.5 w-1.5 rounded-full'
+                        transition={{
+                          type: 'spring',
+                          stiffness: 400,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </nav>
+
+          {/* Divider */}
+          <div className='bg-border/50 mx-3 h-px' />
+
+          {/* Footer with socials */}
+          <motion.div
+            className='p-4'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{
-              delay: 0.4 + socials.length * 0.08,
-              type: 'spring',
-              stiffness: 100,
-            }}
-            whileHover={{
-              scale: 1.15,
-              rotate: 180,
-              transition: { duration: 0.4 },
+              delay: shouldReduceMotion ? 0 : 0.25,
+              duration: 0.3,
             }}
           >
-            <ToggleTheme className='text-muted/80 hover:text-foreground text-xl' />
-          </motion.li>
-        </ul>
+            <div className='flex items-center justify-center gap-1'>
+              {socials.map((social, index) => (
+                <motion.div
+                  key={social.name}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    delay: shouldReduceMotion ? 0 : 0.3 + index * 0.03,
+                    duration: 0.2,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                >
+                  <div
+                    className='group relative p-2.5'
+                    style={{
+                      WebkitTapHighlightColor: 'transparent',
+                      touchAction: 'manipulation',
+                    }}
+                  >
+                    <div className='bg-foreground/5 absolute inset-0 scale-0 rounded-xl transition-transform duration-150 group-active:scale-100' />
+                    <SocialButton
+                      social={social}
+                      className='text-foreground/50 hover:text-foreground/70 relative transition-colors duration-200'
+                    />
+                  </div>
+                </motion.div>
+              ))}
+
+              {/* Divider */}
+              <div className='bg-border/50 mx-1 h-5 w-px' />
+
+              {/* Theme toggle */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  delay: shouldReduceMotion ? 0 : 0.3 + socials.length * 0.03,
+                  duration: 0.2,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+              >
+                <div
+                  className='group relative p-2.5'
+                  style={{
+                    WebkitTapHighlightColor: 'transparent',
+                    touchAction: 'manipulation',
+                  }}
+                >
+                  <div className='bg-foreground/5 absolute inset-0 scale-0 rounded-xl transition-transform duration-150 group-active:scale-100' />
+                  <ToggleTheme className='text-foreground/50 hover:text-foreground/70 relative transition-colors duration-200' />
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
       </motion.div>
     </motion.div>
   );
