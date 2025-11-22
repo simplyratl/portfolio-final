@@ -23,7 +23,7 @@ export default function Home() {
   }));
 
   return (
-    <div className='slide-enter-content flex h-[calc(100vh-120px)] flex-col justify-between gap-12'>
+    <div className='slide-enter-content flex h-[calc(100vh-120px)] flex-col justify-between gap-12 px-4'>
       <div className='flex-1'>
         <div className='mx-auto inline-flex max-w-screen-md flex-col sm:flex sm:flex-row sm:items-center sm:justify-between'>
           <div>
