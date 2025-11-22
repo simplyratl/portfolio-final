@@ -25,7 +25,7 @@ export default function Home() {
   return (
     <div className='slide-enter-content flex h-[calc(100vh-120px)] flex-col justify-between gap-12'>
       <div className='flex-1'>
-        <div className='mx-auto inline-flex max-w-screen-md flex-col px-4 sm:flex sm:flex-row sm:items-center sm:justify-between'>
+        <div className='mx-auto inline-flex max-w-screen-md flex-col sm:flex sm:flex-row sm:items-center sm:justify-between'>
           <div>
             <h1 className='articulat-cf text-shadow-muted text-3xl font-bold text-shadow-2xs/30'>
               Nikica Ražnatović
@@ -38,7 +38,7 @@ export default function Home() {
           </a>
         </div>
 
-        <div className='slide-enter-content mx-auto mt-6 max-w-screen-md space-y-4 px-4'>
+        <div className='slide-enter-content mx-auto mt-6 max-w-screen-md space-y-4'>
           <p>
             I design and develop functional, detail-oriented user interfaces
             that enhance digital experiences.
@@ -68,7 +68,7 @@ export default function Home() {
       <div className='from-background pointer-events-none absolute top-0 left-0 z-[-1] h-50 w-full bg-gradient-to-b to-transparent'></div>
       <BackgroundGradient imagePath='/1920.webp' />
 
-      <div className='mx-auto w-full max-w-screen-md px-4'>
+      <div className='mx-auto w-full max-w-screen-md'>
         <Footer />
       </div>
     </div>
