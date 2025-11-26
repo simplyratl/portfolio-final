@@ -1,0 +1,123 @@
+---
+title: Premature or Late Optimization
+description: Test123
+date: 2025-11-26
+---
+
+As a frontend lead who occasionally dabbles in backend wizardry during free time (because apparently, I hate relaxation), I've spent years watching developers fall into two equally entertaining camps: those who optimize code that runs perfectly fine, and those who ship apps that make users question their life choices.
+
+Let me tell you a story about how I almost became one of them.
+
+## The 10-Document Dilemma
+
+Picture this: I'm building a feature that displays PDF documents. Multiple PDFs, all at once, because apparently someone thought "how many PDFs can we traumatize our users with?" was a valid product question.
+
+I tested it with 10 documents. Smooth as butter on my machine. No lag, no stuttering, just pure documentary bliss. And then the anxiety kicked in.
+
+> _What if there are more documents? What if someone opens 50? What if this becomes the next performance bottleneck that wakes me up at 3 AM?_
+
+I could feel the premature optimization demon whispering sweet nothings about virtual scrolling, lazy loading, and Web Workers. But here's the thing—I had a deadline, and spending three days optimizing a theoretical problem would've been the equivalent of buying fire insurance for a house that doesn't exist yet.
+
+**My solution?** Limit it to 10 documents maximum. Not glamorous. Not a Medium article waiting to happen. But pragmatic. The feature worked, users were happy, and I didn't waste valuable time solving a problem that might never materialize.
+
+I have a variable
+
+```ts
+const MAX_DOCUMENTS_OPENED = 10;
+```
+
+And then if user clicks on 11th document top view it, i remove it from from the queue, revoke url object and then open a new one.
+
+```ts
+const MAX_DOCUMENTS_OPENED = 10;
+
+const openedDocuments = ref<string[]>([]);
+
+const handleOpenDocument = (url: string) => {
+  // If we exceed the max, remove the oldest one
+  if (openedDocuments.value.length >= MAX_DOCUMENTS_OPENED) {
+    const oldUrl = openedDocuments.value.shift(); // remove first (FIFO)
+    if (oldUrl) URL.revokeObjectURL(oldUrl);
+  }
+
+  // Add new one to end
+  openedDocuments.value.push(url);
+};
+```
+
+So with this pseudo code, it will remove the oldest opened one with that in the UI it will close it,
+and then make space for the newly clicked document to view.
+
+That's not premature optimization. That's called being an adult.
+
+## The Two Tribes of Performance Hell
+
+### Tribe 1: The Premature Optimizers
+
+These are the people who reach for `useMemo` before they've even confirmed there's a problem. They'll spend hours debating whether to use a Map or an Object, shaving off microseconds that literally no human can perceive.
+
+The issue isn't that they care about performance—that's admirable. The problem is they're optimizing the **wrong things** while the **right things** scream for attention in the corner.
+
+I've seen developers obsess over bundle size optimizations that save 2KB while ignoring the fact that their app re-renders the entire component tree every time someone breathes near the keyboard. It's like rearranging deck chairs on the Titanic, except the Titanic is on fire and the deck chairs are also on fire.
+
+### Tribe 2: The "Ship It and Forget It" Crowd
+
+Then there's the other extreme: developers who genuinely don't know or don't care about performance until it's too late.
+
+By the time performance issues surface in production, they're often so deeply embedded in the architecture that fixing them requires either a miracle or a complete rewrite. Spoiler alert: management rarely approves the rewrite.
+
+These issues hurt real users. They kill conversions. They make your app feel like it's running through molasses. And when you finally discover them, the codebase is already three sprints ahead, and nobody remembers why that one component renders 47 times on mount.
+
+## So When Should You Actually Care?
+
+Here's my rule of thumb: **test with reality, not theory**.
+
+Performance issues typically come from two sources:
+
+1. **Unnecessary re-renders** - These are easy to catch. Just use your app like a normal human. If it feels janky, sluggish, or like it's thinking too hard, you've got a re-render problem.
+
+2. **Too much data in one place** - This requires a bit more foresight. Don't just test with 3 items in your list. Test with 100. Test with 1,000. See where it breaks. Then optimize _that_.
+
+You don't need to prematurely optimize, but you do need to **proactively test**. There's a difference.
+
+## A War Story: The PDF Page Reordering Nightmare
+
+Want to hear about the time I had to optimize a feature from hell? Buckle up.
+
+We had this section of the app where users could reorder pages from multiple PDFs, save their changes, and then view the result. Sounds simple, right? Wrong.
+
+Every time someone dragged a page, the entire PDF viewer re-rendered. All of them. Every single one. It was like watching a slideshow rendered in PowerPoint 97.
+
+The fix wasn't one silver bullet—it was death by a thousand tiny optimizations. Memoizing components. Splitting state. Virtualizing the list. Debouncing drag events. I became intimate with Vue DevTools Profiler in ways that are probably illegal in some countries.
+
+Did I know this would be a problem from the start? Nope. Did I waste time optimizing it before it was necessary? Also nope. I built it, tested it with real data, found the bottleneck, and _then_ optimized.
+
+That's the dance.
+
+## The Sweet Spot: Pragmatic Performance
+
+Here's what I've learned after years of this:
+
+**Don't optimize prematurely, but don't be willfully ignorant either.**
+
+- Build your feature
+- Test it with realistic (and slightly pessimistic) data
+- If it works fine, ship it
+- If it doesn't, optimize the actual bottleneck
+- Add guardrails (like my 10-document limit) to prevent theoretical disasters
+
+The developers who succeed aren't the ones who optimize everything or optimize nothing. They're the ones who know **what matters** and **when it matters**.
+
+## The Bottom Line
+
+Performance optimization is not a religion. It's not about being the purest developer who never ships unoptimized code. It's about delivering value to users while keeping your app fast enough that they don't ragequit.
+
+Sometimes that means spending a week optimizing a critical path. Sometimes it means shipping something "good enough" and moving on. The trick is knowing which is which.
+
+And if you're not sure? Test it. Profile it. Ask your users. Just don't spend three days optimizing something that runs perfectly fine while your actual performance problems are setting the kitchen on fire.
+
+Because at the end of the day, the best performance optimization is the one that actually needed to happen.
+
+---
+
+_Are you a premature optimizer or a performance nihilist? Neither? Good. You're probably doing it right. Maybe. Test it to be sure._
