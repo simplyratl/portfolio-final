@@ -160,7 +160,7 @@
   }
 }
 
-/* View Transitions API for theme switching with epic effects */
+/* View Transitions API for theme switching */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
@@ -197,4 +197,14 @@
     transform: scale(2.5);
     opacity: 0;
   }
+}
+
+/* Scroll margin for headings to account for sticky header */
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+  scroll-margin-top: 90px;
 }

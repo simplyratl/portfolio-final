@@ -5,9 +5,11 @@ type Props = {
 };
 export default function Layout({ children }: Props) {
   return (
-    <main className='mx-auto max-w-screen-md px-4 pt-6'>
+    <div className='pt-4'>
       <Header />
-      <div className='mt-10'>{children}</div>
-    </main>
+      <main className='mx-auto max-w-screen-md px-4'>
+        <div className='mt-10'>{children}</div>
+      </main>
+    </div>
   );
 }

@@ -5,11 +5,11 @@ type Props = {
 };
 export default function Layout({ children }: Props) {
   return (
-    <main className='mx-auto max-w-[1100px] pt-6'>
-      <div className='mx-auto max-w-screen-md px-4'>
-        <Header />
-      </div>
-      <div className='mt-10'>{children}</div>
-    </main>
+    <div className='pt-4'>
+      <Header />
+      <main className='mx-auto max-w-[1100px]'>
+        <div className='mt-10'>{children}</div>
+      </main>
+    </div>
   );
 }
