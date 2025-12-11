@@ -127,8 +127,13 @@ export default function Header() {
         </div>
       </header>
 
-      <AnimatePresence>
-        {isMenuOpen && <MobileNavigation handleMenuToggle={handleMenuToggle} />}
+      <AnimatePresence initial={false}>
+        {isMenuOpen && (
+          <MobileNavigation
+            key='mobile-nav'
+            handleMenuToggle={handleMenuToggle}
+          />
+        )}
       </AnimatePresence>
     </>
   );
