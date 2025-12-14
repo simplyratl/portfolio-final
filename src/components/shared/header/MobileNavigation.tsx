@@ -1,13 +1,12 @@
 'use client';
 
 import { navLinks } from '@/constants/nav-links';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { socials } from '@/constants/socials';
 import SocialButton from '@/components/shared/SocialButton';
 import ToggleTheme from '@/components/shared/ToggleTheme';
 import Link from 'next/link';
 import { useAsyncRoute } from '@/hooks/useAsyncRouter';
-import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 type Props = {
@@ -20,14 +19,7 @@ export default function MobileNavigation({
   isClosing = false,
 }: Props) {
   const router = useAsyncRoute();
-  const nextRouter = useRouter();
   const [activeLink, setActiveLink] = useState<string | null>(null);
-
-  useEffect(() => {
-    navLinks.forEach((link) => {
-      nextRouter.prefetch(link.href);
-    });
-  }, [nextRouter]);
 
   const handleLinkClick = async (href: string) => {
     setActiveLink(href);

@@ -17,6 +17,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMenuClosing, setIsMenuClosing] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [menuKey, setMenuKey] = useState(0);
   const pathname = usePathname();
 
   const handleMenuToggle = useCallback(() => {
@@ -31,6 +32,7 @@ export default function Header() {
         setIsMenuClosing(false);
       }, 200);
     } else if (!isMenuOpen) {
+      setMenuKey((k) => k + 1); // Force fresh mount
       setIsMenuOpen(true);
     }
   }, [isMenuOpen, isMenuClosing]);
@@ -116,6 +118,7 @@ export default function Header() {
 
       {isMenuOpen && (
         <MobileNavigation
+          key={menuKey}
           handleMenuToggle={handleMenuToggle}
           isClosing={isMenuClosing}
         />
