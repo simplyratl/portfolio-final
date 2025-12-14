@@ -7,23 +7,33 @@ import { navLinks } from '@/constants/nav-links';
 import { socials } from '@/constants/socials';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import ToggleTheme from '../ToggleTheme';
 import MobileNavigation from './MobileNavigation';
 
 export default function Header() {
   const MENU_OPEN_WIDTH = 768;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuClosing, setIsMenuClosing] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
-  const handleMenuToggle = () => {
+  const handleMenuToggle = useCallback(() => {
     if (window.innerWidth >= MENU_OPEN_WIDTH) return;
 
-    setIsMenuOpen(!isMenuOpen);
-  };
+    if (isMenuOpen && !isMenuClosing) {
+      // Start closing animation
+      setIsMenuClosing(true);
+      // Wait for animation to complete before unmounting
+      setTimeout(() => {
+        setIsMenuOpen(false);
+        setIsMenuClosing(false);
+      }, 200);
+    } else if (!isMenuOpen) {
+      setIsMenuOpen(true);
+    }
+  }, [isMenuOpen, isMenuClosing]);
 
   useEffect(() => {
     if (window.innerWidth >= MENU_OPEN_WIDTH) return;
@@ -41,7 +51,7 @@ export default function Header() {
     };
 
     handleScroll();
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -61,36 +71,13 @@ export default function Header() {
             <Logo className='size-7' />
           </PrefetchLink>
 
-          <motion.button
-            className='relative z-50 md:hidden'
+          <button
+            className='relative z-50 p-1 transition-transform active:scale-95 md:hidden'
             onClick={handleMenuToggle}
             aria-label='Toggle menu'
-            whileTap={{ scale: 0.95 }}
           >
-            <AnimatePresence initial={false} mode='wait'>
-              {isMenuOpen ? (
-                <motion.div
-                  key='close'
-                  initial={{ opacity: 0, rotate: -90 }}
-                  animate={{ opacity: 1, rotate: 0 }}
-                  exit={{ opacity: 0, rotate: 90 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <X size={24} />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key='menu'
-                  initial={{ opacity: 0, rotate: 90 }}
-                  animate={{ opacity: 1, rotate: 0 }}
-                  exit={{ opacity: 0, rotate: -90 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Menu size={24} />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
 
           {/* Desktop navigation */}
           <div className='hidden items-center gap-2 md:flex'>
@@ -127,14 +114,12 @@ export default function Header() {
         </div>
       </header>
 
-      <AnimatePresence initial={false}>
-        {isMenuOpen && (
-          <MobileNavigation
-            key='mobile-nav'
-            handleMenuToggle={handleMenuToggle}
-          />
-        )}
-      </AnimatePresence>
+      {isMenuOpen && (
+        <MobileNavigation
+          handleMenuToggle={handleMenuToggle}
+          isClosing={isMenuClosing}
+        />
+      )}
     </>
   );
 }

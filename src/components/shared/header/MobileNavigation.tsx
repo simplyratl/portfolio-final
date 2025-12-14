@@ -1,8 +1,7 @@
 'use client';
 
 import { navLinks } from '@/constants/nav-links';
-import { motion, useReducedMotion, Variants } from 'motion/react';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { socials } from '@/constants/socials';
 import SocialButton from '@/components/shared/SocialButton';
 import ToggleTheme from '@/components/shared/ToggleTheme';
@@ -13,13 +12,16 @@ import { cn } from '@/lib/utils';
 
 type Props = {
   handleMenuToggle: () => void;
+  isClosing?: boolean;
 };
 
-export default function MobileNavigation({ handleMenuToggle }: Props) {
+export default function MobileNavigation({
+  handleMenuToggle,
+  isClosing = false,
+}: Props) {
   const router = useAsyncRoute();
   const nextRouter = useRouter();
   const [activeLink, setActiveLink] = useState<string | null>(null);
-  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     navLinks.forEach((link) => {
@@ -37,99 +39,30 @@ export default function MobileNavigation({ handleMenuToggle }: Props) {
     }
   };
 
-  const menuVariants: Variants = useMemo(
-    () =>
-      shouldReduceMotion
-        ? {
-            initial: { opacity: 0 },
-            animate: {
-              opacity: 1,
-              transition: { duration: 0.15 },
-            },
-            exit: {
-              opacity: 0,
-              transition: { duration: 0.1 },
-            },
-          }
-        : {
-            initial: {
-              opacity: 0,
-              y: 8,
-            },
-            animate: {
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 0.3,
-                ease: [0.2, 0.8, 0.2, 1],
-                staggerChildren: 0.04,
-                delayChildren: 0.05,
-              },
-            },
-            exit: {
-              opacity: 0,
-              y: -8,
-              transition: {
-                duration: 0.2,
-                ease: [0.4, 0, 1, 1],
-              },
-            },
-          },
-    [shouldReduceMotion]
-  );
-
-  const linkVariants: Variants = useMemo(
-    () =>
-      shouldReduceMotion
-        ? {
-            initial: { opacity: 0 },
-            animate: { opacity: 1, transition: { duration: 0.15 } },
-            exit: { opacity: 0, transition: { duration: 0.1 } },
-          }
-        : {
-            initial: { opacity: 0, y: 10 },
-            animate: {
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 0.4,
-                ease: [0.2, 0.8, 0.2, 1],
-              },
-            },
-            exit: {
-              opacity: 0,
-              transition: {
-                duration: 0.15,
-              },
-            },
-          },
-    [shouldReduceMotion]
-  );
-
   return (
-    <motion.div
-      className='bg-background/95 supports-[backdrop-filter]:bg-background/85 fixed inset-0 z-40 flex flex-col backdrop-blur-xl md:hidden'
-      initial='initial'
-      animate='animate'
-      exit='exit'
-      variants={menuVariants}
-      style={{
-        // Force hardware acceleration on iOS Safari
-        WebkitTransform: 'translate3d(0, 0, 0)',
-        transform: 'translate3d(0, 0, 0)',
-      }}
+    <div
+      className={cn(
+        'bg-background fixed inset-0 z-40 flex flex-col md:hidden',
+        isClosing ? 'animate-menu-exit' : 'animate-menu-enter'
+      )}
     >
       <div className='h-14 w-full shrink-0' />
 
       <div className='flex flex-1 flex-col px-8 pt-10 pb-12'>
         <nav className='flex flex-col gap-8'>
-          {navLinks.map((link) => {
+          {navLinks.map((link, i) => {
             const isActive = activeLink === link.href;
             return (
-              <motion.div
+              <div
                 key={link.href}
-                variants={linkVariants}
-                style={{ willChange: 'opacity, transform' }}
+                className={cn(
+                  isClosing ? 'animate-link-exit' : 'animate-link-enter'
+                )}
+                style={{
+                  animationDelay: isClosing
+                    ? `${(navLinks.length - 1 - i) * 20}ms`
+                    : `${50 + i * 40}ms`,
+                }}
               >
                 <Link
                   href={link.href}
@@ -146,15 +79,21 @@ export default function MobileNavigation({ handleMenuToggle }: Props) {
                 >
                   {link.label}
                 </Link>
-              </motion.div>
+              </div>
             );
           })}
         </nav>
 
-        <motion.div
-          variants={linkVariants}
-          className='mt-auto'
-          style={{ willChange: 'opacity, transform' }}
+        <div
+          className={cn(
+            'mt-auto',
+            isClosing ? 'animate-link-exit' : 'animate-link-enter'
+          )}
+          style={{
+            animationDelay: isClosing
+              ? '0ms'
+              : `${50 + navLinks.length * 40}ms`,
+          }}
         >
           <div className='from-border/0 via-border/50 to-border/0 mb-8 h-px w-full bg-gradient-to-r' />
 
@@ -170,8 +109,8 @@ export default function MobileNavigation({ handleMenuToggle }: Props) {
             </div>
             <ToggleTheme />
           </div>
-        </motion.div>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
