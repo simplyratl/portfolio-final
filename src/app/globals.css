@@ -251,20 +251,30 @@
 }
 
 .animate-menu-enter {
-  animation: menu-enter 0.25s ease-out forwards;
+  animation: menu-enter 0.22s ease-out forwards;
+  opacity: 1;
+  contain: layout paint;
+  isolation: isolate;
+  will-change: opacity, transform;
 }
 
 .animate-menu-exit {
-  animation: menu-exit 0.2s ease-in forwards;
+  animation: menu-exit 0.18s ease-in forwards;
+  contain: layout paint;
+  isolation: isolate;
+  will-change: opacity, transform;
 }
 
 .animate-link-enter {
-  opacity: 0;
-  animation: link-enter 0.35s ease-out forwards;
+  animation: link-enter 0.28s ease-out forwards;
+  contain: layout paint;
+  will-change: opacity, transform;
 }
 
 .animate-link-exit {
-  animation: link-exit 0.15s ease-in forwards;
+  animation: link-exit 0.16s ease-in forwards;
+  contain: layout paint;
+  will-change: opacity, transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -275,5 +285,6 @@
     animation: none;
     opacity: 1;
     transform: none;
+    contain: none;
   }
 }

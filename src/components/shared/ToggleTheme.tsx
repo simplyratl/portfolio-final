@@ -3,7 +3,7 @@
 import MoonIcon from '@/icons/MoonIcon';
 import SunIcon from '@/icons/SunIcon';
 import { cn } from '@/lib/utils';
-import { useAnimate } from 'motion/react';
+import { motion, useAnimate, AnimatePresence } from 'motion/react';
 import { useTheme } from 'next-themes';
 import { useEffect, useRef, useState } from 'react';
 
@@ -16,6 +16,7 @@ const ToggleTheme = ({ className }: Props) => {
   const [scope, animate] = useAnimate();
   const [mounted, setMounted] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Only show the toggle after mounting to avoid hydration mismatch
   useEffect(() => {
@@ -23,30 +24,16 @@ const ToggleTheme = ({ className }: Props) => {
   }, []);
 
   const handleThemeSwitch = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+
     const newTheme = theme === 'light' ? 'dark' : 'light';
     const isMobile = window.innerWidth < 768;
-    const directionRotation = theme === 'light' ? 0 : 360;
-
-    // Icon rotation animation
-    await animate(
-      'svg',
-      {
-        scale: 0.3,
-        opacity: 0.3,
-        rotate: directionRotation / 2,
-      },
-      { duration: 0.18 }
-    );
 
     // For mobile or unsupported browsers, use simple animation
     if (isMobile || !document.startViewTransition || !buttonRef.current) {
       setTheme(newTheme);
-      animate(
-        'svg',
-        { rotate: directionRotation, scale: 0.92 },
-        { type: 'spring', duration: 0.8, bounce: 0.3 }
-      );
-      animate('svg', { scale: 1, opacity: 1 }, { delay: 0.2 });
+      setTimeout(() => setIsAnimating(false), 600);
       return;
     }
 
@@ -56,9 +43,9 @@ const ToggleTheme = ({ className }: Props) => {
     const centerX = buttonRect.left + buttonRect.width / 2;
     const centerY = buttonRect.top + buttonRect.height / 2;
 
-    // Create ripple effect on button (desktop only)
+    // Create enhanced ripple effect on button (desktop only)
     const ripple = document.createElement('span');
-    const size = Math.max(buttonRect.width, buttonRect.height);
+    const size = Math.max(buttonRect.width, buttonRect.height) * 2;
     const rippleX = e.clientX - buttonRect.left - size / 2;
     const rippleY = e.clientY - buttonRect.top - size / 2;
 
@@ -69,15 +56,15 @@ const ToggleTheme = ({ className }: Props) => {
       left: ${rippleX}px;
       top: ${rippleY}px;
       border-radius: 50%;
-      background: radial-gradient(circle, currentColor 0%, transparent 70%);
-      opacity: 0.6;
+      background: radial-gradient(circle, currentColor 0%, transparent 60%);
+      opacity: 0.5;
       pointer-events: none;
-      animation: ripple 0.7s ease-out;
+      animation: ripple 0.6s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 0;
     `;
 
     button.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 700);
+    setTimeout(() => ripple.remove(), 600);
 
     // Calculate the maximum distance from the click point to the corners
     const endRadius = Math.hypot(
@@ -90,11 +77,11 @@ const ToggleTheme = ({ className }: Props) => {
       setTheme(newTheme);
     });
 
-    // Animate the circular reveal
+    // Animate the circular reveal with smoother easing
     transition.ready.then(() => {
       const clipPath = [
         `circle(0px at ${centerX}px ${centerY}px)`,
-        `circle(${endRadius * 1.2}px at ${centerX}px ${centerY}px)`,
+        `circle(${endRadius * 1.1}px at ${centerX}px ${centerY}px)`,
       ];
 
       document.documentElement.animate(
@@ -102,21 +89,46 @@ const ToggleTheme = ({ className }: Props) => {
           clipPath: clipPath,
         },
         {
-          duration: 800,
-          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          duration: 650,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
           pseudoElement: '::view-transition-new(root)',
           fill: 'both',
         }
       );
-
-      // Reset icon animation with spring
-      animate(
-        'svg',
-        { rotate: directionRotation, scale: 0.92 },
-        { type: 'spring', duration: 0.8, bounce: 0.3 }
-      );
-      animate('svg', { scale: 1, opacity: 1 }, { delay: 0.2 });
     });
+
+    transition.finished.then(() => {
+      setIsAnimating(false);
+    });
+  };
+
+  // Icon animation variants
+  const iconVariants = {
+    initial: {
+      scale: 0,
+      rotate: -180,
+      opacity: 0,
+    },
+    animate: {
+      scale: 1,
+      rotate: 0,
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 200,
+        damping: 15,
+        mass: 0.8,
+      },
+    },
+    exit: {
+      scale: 0,
+      rotate: 180,
+      opacity: 0,
+      transition: {
+        duration: 0.25,
+        ease: [0.4, 0, 1, 1],
+      },
+    },
   };
 
   return (
@@ -139,25 +151,34 @@ const ToggleTheme = ({ className }: Props) => {
         aria-label='Toggle theme'
         onClick={handleThemeSwitch}
       >
-        {mounted ? (
-          <>
-            <SunIcon
-              className='relative z-10 h-full w-full transition-transform duration-300 group-hover:scale-110'
-              style={{
-                display: theme === 'light' ? 'block' : 'none',
-              }}
-            />
-
-            <MoonIcon
-              className='relative z-10 h-full w-full transition-transform duration-300 group-hover:scale-110'
-              style={{
-                display: theme === 'dark' ? 'block' : 'none',
-              }}
-            />
-          </>
-        ) : (
-          <div className='h-full w-full' />
+        {mounted && (
+          <AnimatePresence mode='wait' initial={false}>
+            {theme === 'light' ? (
+              <motion.div
+                key='sun'
+                variants={iconVariants}
+                initial='initial'
+                animate='animate'
+                exit='exit'
+                className='relative z-10 flex h-full w-full items-center justify-center'
+              >
+                <SunIcon className='h-full w-full transition-transform duration-300 group-hover:scale-110' />
+              </motion.div>
+            ) : (
+              <motion.div
+                key='moon'
+                variants={iconVariants}
+                initial='initial'
+                animate='animate'
+                exit='exit'
+                className='relative z-10 flex h-full w-full items-center justify-center'
+              >
+                <MoonIcon className='h-full w-full transition-transform duration-300 group-hover:scale-110' />
+              </motion.div>
+            )}
+          </AnimatePresence>
         )}
+        {!mounted && <div className='h-full w-full' />}
       </button>
     </>
   );

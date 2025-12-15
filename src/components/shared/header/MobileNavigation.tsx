@@ -1,25 +1,81 @@
 'use client';
 
 import { navLinks } from '@/constants/nav-links';
-import { useState } from 'react';
 import { socials } from '@/constants/socials';
 import SocialButton from '@/components/shared/SocialButton';
 import ToggleTheme from '@/components/shared/ToggleTheme';
 import Link from 'next/link';
 import { useAsyncRoute } from '@/hooks/useAsyncRouter';
 import { cn } from '@/lib/utils';
+import { motion, useReducedMotion, Variants } from 'motion/react';
+import { useMemo, useState } from 'react';
 
 type Props = {
   handleMenuToggle: () => void;
-  isClosing?: boolean;
 };
 
-export default function MobileNavigation({
-  handleMenuToggle,
-  isClosing = false,
-}: Props) {
+export default function MobileNavigation({ handleMenuToggle }: Props) {
   const router = useAsyncRoute();
   const [activeLink, setActiveLink] = useState<string | null>(null);
+  const prefersReduced = useReducedMotion();
+
+  const containerVariants: Variants = useMemo(
+    () =>
+      prefersReduced
+        ? {
+            initial: { opacity: 0 },
+            animate: { opacity: 1, transition: { duration: 0.15 } },
+            exit: { opacity: 0, transition: { duration: 0.12 } },
+          }
+        : {
+            initial: { opacity: 0, scale: 0.96 },
+            animate: {
+              opacity: 1,
+              scale: 1,
+              transition: {
+                duration: 0.3,
+                ease: [0.22, 1, 0.36, 1],
+                staggerChildren: 0.05,
+                delayChildren: 0.1,
+              },
+            },
+            exit: {
+              opacity: 0,
+              scale: 0.96,
+              transition: {
+                duration: 0.2,
+                ease: [0.4, 0, 1, 1],
+                staggerChildren: 0.02,
+                staggerDirection: -1,
+              },
+            },
+          },
+    [prefersReduced]
+  );
+
+  const itemVariants: Variants = useMemo(
+    () =>
+      prefersReduced
+        ? {
+            initial: { opacity: 0 },
+            animate: { opacity: 1, transition: { duration: 0.15 } },
+            exit: { opacity: 0, transition: { duration: 0.12 } },
+          }
+        : {
+            initial: { opacity: 0, y: 15 },
+            animate: {
+              opacity: 1,
+              y: 0,
+              transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+            },
+            exit: {
+              opacity: 0,
+              y: 10,
+              transition: { duration: 0.2, ease: [0.4, 0, 1, 1] },
+            },
+          },
+    [prefersReduced]
+  );
 
   const handleLinkClick = async (href: string) => {
     setActiveLink(href);
@@ -32,29 +88,33 @@ export default function MobileNavigation({
   };
 
   return (
-    <div
+    <motion.div
       className={cn(
-        'bg-background fixed inset-0 z-40 flex flex-col md:hidden',
-        isClosing ? 'animate-menu-exit' : 'animate-menu-enter'
+        'bg-background fixed inset-0 z-40 flex h-dvh flex-col md:hidden'
       )}
+      initial='initial'
+      animate='animate'
+      exit='exit'
+      variants={containerVariants}
+      style={{
+        contain: 'layout paint',
+        isolation: 'isolate',
+        willChange: 'opacity, transform',
+        WebkitTransform: 'translateZ(0)',
+        transform: 'translateZ(0)',
+      }}
     >
       <div className='h-14 w-full shrink-0' />
 
       <div className='flex flex-1 flex-col px-8 pt-10 pb-12'>
         <nav className='flex flex-col gap-8'>
-          {navLinks.map((link, i) => {
+          {navLinks.map((link) => {
             const isActive = activeLink === link.href;
             return (
-              <div
+              <motion.div
                 key={link.href}
-                className={cn(
-                  isClosing ? 'animate-link-exit' : 'animate-link-enter'
-                )}
-                style={{
-                  animationDelay: isClosing
-                    ? `${(navLinks.length - 1 - i) * 20}ms`
-                    : `${50 + i * 40}ms`,
-                }}
+                variants={itemVariants}
+                style={{ willChange: 'opacity, transform' }}
               >
                 <Link
                   href={link.href}
@@ -71,21 +131,15 @@ export default function MobileNavigation({
                 >
                   {link.label}
                 </Link>
-              </div>
+              </motion.div>
             );
           })}
         </nav>
 
-        <div
-          className={cn(
-            'mt-auto',
-            isClosing ? 'animate-link-exit' : 'animate-link-enter'
-          )}
-          style={{
-            animationDelay: isClosing
-              ? '0ms'
-              : `${50 + navLinks.length * 40}ms`,
-          }}
+        <motion.div
+          variants={itemVariants}
+          className='mt-auto'
+          style={{ willChange: 'opacity, transform' }}
         >
           <div className='from-border/0 via-border/50 to-border/0 mb-8 h-px w-full bg-gradient-to-r' />
 
@@ -101,8 +155,8 @@ export default function MobileNavigation({
             </div>
             <ToggleTheme />
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }

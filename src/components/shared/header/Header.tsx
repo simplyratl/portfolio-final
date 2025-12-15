@@ -8,34 +8,22 @@ import { socials } from '@/constants/socials';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import ToggleTheme from '../ToggleTheme';
 import MobileNavigation from './MobileNavigation';
+import { AnimatePresence, motion } from 'motion/react';
 
 export default function Header() {
   const MENU_OPEN_WIDTH = 768;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMenuClosing, setIsMenuClosing] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [menuKey, setMenuKey] = useState(0);
   const pathname = usePathname();
 
-  const handleMenuToggle = useCallback(() => {
-    if (window.innerWidth >= MENU_OPEN_WIDTH) return;
-
-    if (isMenuOpen && !isMenuClosing) {
-      // Start closing animation
-      setIsMenuClosing(true);
-      // Wait for animation to complete before unmounting
-      setTimeout(() => {
-        setIsMenuOpen(false);
-        setIsMenuClosing(false);
-      }, 200);
-    } else if (!isMenuOpen) {
-      setMenuKey((k) => k + 1); // Force fresh mount
-      setIsMenuOpen(true);
-    }
-  }, [isMenuOpen, isMenuClosing]);
+  const handleMenuToggle = () => {
+    if (typeof window !== 'undefined' && window.innerWidth >= MENU_OPEN_WIDTH)
+      return;
+    setIsMenuOpen((open) => !open);
+  };
 
   useEffect(() => {
     if (window.innerWidth >= MENU_OPEN_WIDTH) return;
@@ -73,13 +61,36 @@ export default function Header() {
             <Logo className='size-7' />
           </PrefetchLink>
 
-          <button
+          <motion.button
             className='relative z-50 p-1 transition-transform active:scale-95 md:hidden'
             onClick={handleMenuToggle}
             aria-label='Toggle menu'
+            whileTap={{ scale: 0.92 }}
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+            <AnimatePresence mode='popLayout' initial={false}>
+              {isMenuOpen ? (
+                <motion.span
+                  key='close'
+                  initial={{ opacity: 0, rotate: -90 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: 90 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <X size={24} />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key='menu'
+                  initial={{ opacity: 0, rotate: 90 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: -90 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <Menu size={24} />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
 
           {/* Desktop navigation */}
           <div className='hidden items-center gap-2 md:flex'>
@@ -116,13 +127,14 @@ export default function Header() {
         </div>
       </header>
 
-      {isMenuOpen && (
-        <MobileNavigation
-          key={menuKey}
-          handleMenuToggle={handleMenuToggle}
-          isClosing={isMenuClosing}
-        />
-      )}
+      <AnimatePresence mode='wait' initial={false}>
+        {isMenuOpen && (
+          <MobileNavigation
+            key='mobile-nav'
+            handleMenuToggle={handleMenuToggle}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }
