@@ -62,7 +62,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
       <ReadingProgressBar />
       <div className='group/article'>
         <BlogTransition>
-          <article className='slide-enter-content pb-10'>
+          <article className='pt-4 pb-10'>
             <div>
               <div className='flex items-start justify-between gap-4'>
                 <div className='flex-1'>
