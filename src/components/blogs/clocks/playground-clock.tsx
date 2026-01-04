@@ -659,9 +659,9 @@ const PlaygroundClock = () => {
 
   return (
     <div className='flex flex-col items-center gap-8'>
-      <div className='grid h-[200px] grid-cols-3 gap-10'>
-        <div className='grid grid-cols-2 gap-2'>
-          <div className='grid grid-cols-4 grid-rows-6 gap-0.5'>
+      <div className='flex flex-wrap justify-center gap-8'>
+        <div className='grid grid-cols-2 gap-4'>
+          <div className='grid h-56 w-36 grid-cols-4 grid-rows-6 gap-1'>
             {new Array(24).fill(0).map((_, index) => (
               <ClockNode
                 key={index}
@@ -672,7 +672,7 @@ const PlaygroundClock = () => {
               />
             ))}
           </div>
-          <div className='grid grid-cols-4 grid-rows-6 gap-0.5'>
+          <div className='grid h-56 w-36 grid-cols-4 grid-rows-6 gap-1'>
             {new Array(24).fill(0).map((_, index) => (
               <ClockNode
                 key={index}
@@ -684,8 +684,8 @@ const PlaygroundClock = () => {
             ))}
           </div>
         </div>
-        <div className='grid grid-cols-2 gap-2'>
-          <div className='grid w-fit grid-cols-4 grid-rows-6 gap-0.5'>
+        <div className='grid grid-cols-2 gap-4'>
+          <div className='grid h-56 w-36 grid-cols-4 grid-rows-6 gap-1'>
             {new Array(24).fill(0).map((_, index) => (
               <ClockNode
                 key={index}
@@ -696,7 +696,7 @@ const PlaygroundClock = () => {
               />
             ))}
           </div>
-          <div className='grid grid-cols-4 grid-rows-6 gap-0.5'>
+          <div className='grid h-56 w-36 grid-cols-4 grid-rows-6 gap-1'>
             {new Array(24).fill(0).map((_, index) => (
               <ClockNode
                 key={index}
@@ -709,8 +709,8 @@ const PlaygroundClock = () => {
           </div>
         </div>
 
-        <div className='grid grid-cols-2 gap-2'>
-          <div className='grid grid-cols-4 grid-rows-6 gap-0.5'>
+        <div className='grid grid-cols-2 gap-4'>
+          <div className='grid h-56 w-36 grid-cols-4 grid-rows-6 gap-1'>
             {new Array(24).fill(0).map((_, index) => (
               <ClockNode
                 key={index}
@@ -721,7 +721,7 @@ const PlaygroundClock = () => {
               />
             ))}
           </div>
-          <div className='grid w-fit grid-cols-4 grid-rows-6 gap-0.5'>
+          <div className='grid h-56 w-36 grid-cols-4 grid-rows-6 gap-1'>
             {new Array(24).fill(0).map((_, index) => (
               <ClockNode
                 key={index}
