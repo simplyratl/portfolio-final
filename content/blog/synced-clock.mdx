@@ -1,0 +1,189 @@
+---
+title: Synced Clock Animation
+description: Building a Clock Made of 144 Clocks
+date: 2026-01-04
+---
+
+<div className='left- absolute left-1/2 z-[1] w-[100vw] -translate-x-1/2 lg:w-[70vw]'>
+  <PlaygroundClock />
+</div>
+
+<div className="pt-80">
+I was experimenting with animations one night and thought, "What if I built a clock made of 144 smaller clocks?" Turns out, it's a pretty interesting technical challenge.
+
+Let me walk you through how I built it and what I learned along the way.
+
+## Why Build This?
+
+It's a fair question. The simple answer is that it's visually interesting and makes people stop and look twice. I also wanted to explore animations, time zones, and managing a lot of moving components in React.
+
+Is it practical? Not really. Is it a good learning project? Absolutely.
+
+## The Core Concept
+
+The idea is straightforward:
+
+- Take a digital clock display (like 12:34:56)
+- Each digit is made up of a 4x6 grid of tiny clocks
+- Each tiny clock has two hands that rotate to form segments
+- Together, these segments create the shape of the digit
+
+It's similar to those old seven-segment displays, but using rotating clock hands instead of static segments.
+
+## The Building Blocks
+
+### Step 1: The Tiny Clock Component
+
+First, I needed to build the basic unit: a single clock face with two hands.
+
+```
+create a clock component that:
+  - takes two target angles as props
+  - renders two hands (basically colored lines)
+  - rotates each hand to the target angle
+  - adds smooth transitions between angles
+```
+
+The tricky part? Making sure the hands always take the shortest path when rotating. You don't want a hand spinning 270 degrees clockwise when it could just go 90 degrees counter-clockwise.
+
+```
+function findShortestRotation(currentAngle, targetAngle):
+  - normalize both angles to 0-360 range
+  - calculate the difference
+  - if difference > 180, go the other way
+  - return the shortest path
+```
+
+### Step 2: Defining the Numbers
+
+This was the tedious part. I had to figure out which clock positions should be "on" for each digit (0-9).
+
+Each digit is a 4x6 grid (24 positions). For each position, I needed to define what angles the two hands should have:
+
+- **Corners**: One hand points one way, another points perpendicular
+- **Straight lines**: Hands point in opposite directions
+- **Unused**: Hands are hidden off-screen
+
+```
+for digit 0:
+  top row: corner, line, line, corner
+  second row: straight, corner, corner, straight
+  middle rows: straight, straight, straight, straight
+  bottom row: corner, line, line, corner
+```
+
+I did this for all 10 digits. It was tedious, but necessary.
+
+### Step 3: The World Clock Feature
+
+Here's where it gets interesting. I mapped 144 cities to the 144 clock positions. When you click on any tiny clock, the entire display switches to that city's time zone.
+
+```
+create array of 144 cities with:
+  - city name
+  - time zone identifier
+
+when a clock is clicked:
+  - update the main time zone
+  - recalculate current time for that zone
+  - all clocks update to show new time
+```
+
+The tooltip on hover shows which city that clock represents and what time it is there. It combines the functionality of a world clock with a digital display.
+
+### Step 4: The Time Update Loop
+
+Every second, I need to:
+
+```
+function updateDisplay():
+  - get current time (in selected time zone or local)
+  - break it into hours, minutes, seconds
+  - split each into tens and ones digits
+  - update each digit grid accordingly
+```
+
+So if it's 12:34:56:
+
+- First grid shows "1" (tens of hours)
+- Second grid shows "2" (ones of hours)
+- Third grid shows "3" (tens of minutes)
+- Fourth grid shows "4" (ones of minutes)
+- Fifth grid shows "5" (tens of seconds)
+- Sixth grid shows "6" (ones of seconds)
+
+## The Challenges I Faced
+
+### Challenge 1: Performance
+
+144 clocks updating every second creates a lot of DOM updates. React needs to handle this efficiently.
+
+**Solution**: I used `useMemo` to prevent unnecessary recalculations and made sure each tiny clock only re-renders when its specific angles change.
+
+### Challenge 2: Smooth Transitions
+
+Getting the clock hands to transition smoothly without weird jumps was harder than expected.
+
+**Solution**: CSS transitions are your friend, but you need to be smart about angle calculations. Always take the shortest path!
+
+### Challenge 3: The Grid Layout
+
+Making everything responsive and properly sized took some work. The layout needed to be visible but not overwhelming on different screen sizes.
+
+**Solution**: CSS Grid worked well here. I used `aspect-square` to keep each clock circular and `gap` properties to space things properly.
+
+## Key Takeaways
+
+**Moment 1**: Realizing I could use rotation angles to create any shape was the breakthrough. It's similar to pixel art, but with clock hands.
+
+**Moment 2**: The world clock feature came later as an enhancement. Hovering over a clock and seeing different cities made the project more interesting.
+
+**Moment 3**: Watching all 144 clocks synchronize when the time changes is satisfying. The coordination of so many moving parts working together is visually appealing.
+
+## What I Learned
+
+1. **Animation is Math**
+
+   - Smooth transitions require thinking about geometry
+   - The shortest path isn't always obvious
+   - CSS handles a lot if you set it up right
+
+2. **Performance Matters**
+
+   - 144 components updating simultaneously can slow things down
+   - Memoization is your friend
+   - Sometimes "good enough" is actually good enough
+
+3. **Design Through Constraints**
+
+   - Having exactly 144 positions forced creative decisions
+   - Limitations can breed creativity
+
+4. **User Experience Details**
+   - Tooltips make exploration fun
+   - Click interactions add depth
+   - Little touches matter
+
+## The Uncomfortable Truth
+
+This project isn't necessary. Nobody needs a clock made of 144 clocks. But that's not really the point.
+
+Sometimes you build things to see if you can. Sometimes you explore an idea because it's interesting. The process of figuring out how to make something work can be more valuable than the end result itself.
+
+## If You Want to Build Something Similar
+
+Here's my advice:
+
+1. **Start with one unit** - Get a single clock working before managing 144 of them
+2. **Plan your data structure** - Figure out how to represent digits before coding
+3. **Test with simple cases** - Make sure basic digits work before trying all ten
+4. **Add features incrementally** - The world clock came later, not in the first version
+5. **Embrace experimentation** - Don't be afraid to try something different
+
+## Final Thoughts
+
+This isn't the most practical project I've built, but it taught me a lot about animations, time zones, React performance, and grid layouts.
+
+Sometimes the best learning comes from building things that don't need to exist.
+
+</div>

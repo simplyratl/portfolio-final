@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import MarkdownImage from '@/components/shared/markdown/MarkdownImage';
 import CardsDepthOverview from '@/components/blogs/depth/CardsDepthOverview';
 import { FormDepthOverview } from '@/components/blogs/depth/FormDepthOverview';
+import PlaygroundClock from '@/components/blogs/clocks/playground-clock';
 
 const components = {
   h1: ({ ...props }) => (
@@ -111,6 +112,7 @@ const components = {
   MarkdownVideo,
   CardsDepthOverview,
   FormDepthOverview,
+  PlaygroundClock,
 };
 
 interface MdxProps {
