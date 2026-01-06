@@ -9,181 +9,240 @@ date: 2026-01-04
 </div>
 
 <div className="pt-210 min-[640px]:pt-150 min-[975px]:pt-80">
-I was experimenting with animations one night and thought, "What if I built a clock made of 144 smaller clocks?" Turns out, it's a pretty interesting technical challenge.
+## A Creative Experiment in Time Visualization
 
-Let me walk you through how I built it and what I learned along the way.
+What if you could tell time not with one clock, but with 144 mini-clocks, each representing a different city around the world? That's exactly what I built. A digital clock display where every digit is formed by an array of 24 animated clock faces, and each clock face shows the time in a different global city.
 
-## Why Build This?
+## The Concept
 
-It's a fair question. The simple answer is that it's visually interesting and makes people stop and look twice. I also wanted to explore animations, time zones, and managing a lot of moving components in React.
+The core idea is beautifully recursive: use clocks to display clock digits. Each of the six digits in a time display (HH:MM:SS) is rendered as a 4×6 grid of 24 individual clock faces. These mini-clocks don't just sit there—they actively rotate their hands to form the shape of each digit, creating a mesmerizing animation whenever the time changes.
 
-Is it practical? Not really. Is it a good learning project? Absolutely.
+## The Architecture
 
-## The Core Concept
+### 1. Digit Representation with Clock Hands
 
-The idea is straightforward:
+The foundation of this project is mapping each digit (0-9) to a pattern of clock hand positions:
 
-- Take a digital clock display (like 12:34:56)
-- Each digit is made up of a 4x6 grid of tiny clocks
-- Each tiny clock has two hands that rotate to form segments
-- Together, these segments create the shape of the digit
+```typescript
+type Combination = [number, number]; // [angle1, angle2]
 
-It's similar to those old seven-segment displays, but using rotating clock hands instead of static segments.
+const combinations = {
+  'bottom-right-corner': [90, 0] as Combination,
+  'bottom-left-corner': [180, 90] as Combination,
+  'top-left-corner': [270, 180] as Combination,
+  'top-right-corner': [270, 0] as Combination,
+  straight: [90, 270] as Combination,
+  line: [180, 0] as Combination,
+  unused: [-220, -220] as Combination,
+};
 
-## The Building Blocks
+// Example: The digit "0" forms an outline
+const digit_0: Combination[] = [
+  combinations['bottom-right-corner'],
+  combinations['line'],
+  combinations['line'],
+  combinations['bottom-left-corner'],
 
-### Step 1: The Tiny Clock Component
+  combinations['straight'],
+  combinations['bottom-right-corner'],
+  combinations['bottom-left-corner'],
+  combinations['straight'],
 
-First, I needed to build the basic unit: a single clock face with two hands.
+  combinations['straight'],
+  combinations['straight'],
+  combinations['straight'],
+  combinations['straight'],
 
-```
-create a clock component that:
-  - takes two target angles as props
-  - renders two hands (basically colored lines)
-  - rotates each hand to the target angle
-  - adds smooth transitions between angles
-```
+  combinations['straight'],
+  combinations['straight'],
+  combinations['straight'],
+  combinations['straight'],
 
-The tricky part? Making sure the hands always take the shortest path when rotating. You don't want a hand spinning 270 degrees clockwise when it could just go 90 degrees counter-clockwise.
+  combinations['straight'],
+  combinations['top-right-corner'],
+  combinations['top-left-corner'],
+  combinations['straight'],
 
-```
-function findShortestRotation(currentAngle, targetAngle):
-  - normalize both angles to 0-360 range
-  - calculate the difference
-  - if difference > 180, go the other way
-  - return the shortest path
-```
+  combinations['top-right-corner'],
+  combinations['line'],
+  combinations['line'],
+  combinations['top-left-corner'],
+];
 
-### Step 2: Defining the Numbers
-
-This was the tedious part. I had to figure out which clock positions should be "on" for each digit (0-9).
-
-Each digit is a 4x6 grid (24 positions). For each position, I needed to define what angles the two hands should have:
-
-- **Corners**: One hand points one way, another points perpendicular
-- **Straight lines**: Hands point in opposite directions
-- **Unused**: Hands are hidden off-screen
-
-```
-for digit 0:
-  top row: corner, line, line, corner
-  second row: straight, corner, corner, straight
-  middle rows: straight, straight, straight, straight
-  bottom row: corner, line, line, corner
-```
-
-I did this for all 10 digits. It was tedious, but necessary.
-
-### Step 3: The World Clock Feature
-
-Here's where it gets interesting. I mapped 144 cities to the 144 clock positions. When you click on any tiny clock, the entire display switches to that city's time zone.
-
-```
-create array of 144 cities with:
-  - city name
-  - time zone identifier
-
-when a clock is clicked:
-  - update the main time zone
-  - recalculate current time for that zone
-  - all clocks update to show new time
+const numbers: Record<number, Combination[]> = {
+  0: digit_0,
+  1: digit_1,
+  // ... 2-9
+};
 ```
 
-The tooltip on hover shows which city that clock represents and what time it is there. It combines the functionality of a world clock with a digital display.
+Each position uses predefined "combinations" of two clock hands:
 
-### Step 4: The Time Update Loop
+- **Corner pieces**: Two hands at 90° apart forming corners
+- **Lines**: Two hands at 180° apart forming straight edges
+- **Unused**: Hidden hands for negative space
 
-Every second, I need to:
+### 2. The World Clock Layer
 
+Here's where it gets interesting—each of those 144 mini-clocks represents a real city:
+
+```typescript
+type City = {
+  label: string;
+  timeZone: string;
+};
+
+const cities: City[] = [
+  { label: 'New York', timeZone: 'America/New_York' },
+  { label: 'Tokyo', timeZone: 'Asia/Tokyo' },
+  { label: 'London', timeZone: 'Europe/London' },
+  // ... 141 more cities
+];
+
+// Ensure exactly 144 cities (pad if needed)
+const cities144: City[] = (() => {
+  const list = cities.filter((c) => c.timeZone && c.label);
+  const unique = list.slice(0, 144);
+  while (unique.length < 144) {
+    unique.push(list[unique.length % list.length]);
+  }
+  return unique.slice(0, 144);
+})();
+
+// Distribute cities across all 144 clock positions
+// 6 digits × 24 clocks per digit = 144 total clocks
+// cities[0...23]    - hour tens digit
+// cities[24...47]   - hour ones digit
+// cities[48...71]   - minute tens digit
+// cities[72...95]   - minute ones digit
+// cities[96...119]  - second tens digit
+// cities[120...143] - second ones digit
 ```
-function updateDisplay():
-  - get current time (in selected time zone or local)
-  - break it into hours, minutes, seconds
-  - split each into tens and ones digits
-  - update each digit grid accordingly
+
+When you hover over any mini-clock, you see which city it represents and what time it is there.
+
+### 3. Smooth Animations
+
+The magic happens in the transitions. When a digit changes (say, from 23:59 to 00:00), all affected clocks smoothly rotate to their new positions:
+
+```typescript
+const shortestDelta = (from: number, to: number): number => {
+  const mod = (value: number, modulus: number) =>
+    ((value % modulus) + modulus) % modulus;
+
+  const fromNorm = mod(from, 360);
+  return mod(to - fromNorm + 540, 360) - 180;
+};
+
+const animateToTarget = (currentAngle: number, targetAngle: number): number => {
+  // Calculate shortest rotation path
+  const delta = shortestDelta(currentAngle, targetAngle);
+
+  // Return new angle (React will handle smooth transition)
+  return currentAngle + delta;
+};
+
+// Usage in component
+useEffect(() => {
+  setAngleA((prev) => animateToTarget(prev, targetA));
+  setAngleB((prev) => animateToTarget(prev, targetB));
+}, [targetA, targetB]);
 ```
 
-So if it's 12:34:56:
+This ensures hands always take the shortest path, never spinning unnecessarily.
 
-- First grid shows "1" (tens of hours)
-- Second grid shows "2" (ones of hours)
-- Third grid shows "3" (tens of minutes)
-- Fourth grid shows "4" (ones of minutes)
-- Fifth grid shows "5" (tens of seconds)
-- Sixth grid shows "6" (ones of seconds)
+### 4. Real-Time Updates
 
-## The Challenges I Faced
+The entire display updates every second:
 
-### Challenge 1: Performance
+```typescript
+const [hour, setHour] = useState<number>(0);
+const [minute, setMinute] = useState<number>(0);
+const [second, setSecond] = useState<number>(0);
+const [timeZone, setTimeZone] = useState<string | undefined>(undefined);
 
-144 clocks updating every second creates a lot of DOM updates. React needs to handle this efficiently.
+useEffect(() => {
+  const updateTime = () => {
+    const now = new Date();
 
-**Solution**: I used `useMemo` to prevent unnecessary recalculations and made sure each tiny clock only re-renders when its specific angles change.
+    if (timeZone) {
+      // Get time in selected timezone
+      const timeString = now.toLocaleTimeString('en-GB', {
+        timeZone,
+      });
+      const [h, m, s] = timeString.split(':').map(Number);
+      setHour(h);
+      setMinute(m);
+      setSecond(s);
+    } else {
+      // Use local time
+      setHour(now.getHours());
+      setMinute(now.getMinutes());
+      setSecond(now.getSeconds());
+    }
+  };
 
-### Challenge 2: Smooth Transitions
+  updateTime();
+  const interval = setInterval(updateTime, 1000);
 
-Getting the clock hands to transition smoothly without weird jumps was harder than expected.
+  return () => clearInterval(interval);
+}, [timeZone]);
 
-**Solution**: CSS transitions are your friend, but you need to be smart about angle calculations. Always take the shortest path!
+// Calculate digit values
+const hourTens = Math.floor(hour / 10);
+const hourOnes = hour % 10;
+const minuteTens = Math.floor(minute / 10);
+const minuteOnes = minute % 10;
+const secondTens = Math.floor(second / 10);
+const secondOnes = second % 10;
+```
 
-### Challenge 3: The Grid Layout
+### 5. Interactive Time Travel
 
-Making everything responsive and properly sized took some work. The layout needed to be visible but not overwhelming on different screen sizes.
+The interactive element lets you click any clock to switch the entire display to that city's timezone:
 
-**Solution**: CSS Grid worked well here. I used `aspect-square` to keep each clock circular and `gap` properties to space things properly.
+```typescript
+const handleCitySelect = (selectedTimeZone: string) => {
+  setTimeZone(selectedTimeZone);
+  // All 144 clocks now show time in selected timezone
+  // Digit display updates to show that time
+};
 
-## Key Takeaways
+const handleResetToLocal = () => {
+  setTimeZone(undefined);
+  // Return to showing local time
+};
 
-**Moment 1**: Realizing I could use rotation angles to create any shape was the breakthrough. It's similar to pixel art, but with clock hands.
+// In ClockNode component
+<div
+  onClick={() => city && onCitySelect?.(city.timeZone)}
+  className="cursor-pointer"
+>
+  {/* Clock hands */}
+</div>
+```
 
-**Moment 2**: The world clock feature came later as an enhancement. Hovering over a clock and seeing different cities made the project more interesting.
+## Technical Highlights
 
-**Moment 3**: Watching all 144 clocks synchronize when the time changes is satisfying. The coordination of so many moving parts working together is visually appealing.
+- **React hooks** for state management and side effects
+- **CSS transforms** for smooth hand rotations with hardware acceleration
+- **Intl.DateTimeFormat API** for timezone-aware time formatting
+- **Grid layouts** for precise positioning of 144 individual elements
+- **Modular design** with reusable clock components
 
-## What I Learned
+## The Result
 
-1. **Animation is Math**
+What you get is a hypnotic visualization where:
 
-   - Smooth transitions require thinking about geometry
-   - The shortest path isn't always obvious
-   - CSS handles a lot if you set it up right
+- Time flows through 144 synchronized mini-clocks
+- Each clock represents a real city somewhere in the world
+- Digit transitions create beautiful choreographed animations
+- You can instantly jump to any global timezone with a click
 
-2. **Performance Matters**
+It's a testament to how creative constraints—representing digits purely through clock hand positions—can lead to unexpectedly engaging results.
 
-   - 144 components updating simultaneously can slow things down
-   - Memoization is your friend
-   - Sometimes "good enough" is actually good enough
+---
 
-3. **Design Through Constraints**
-
-   - Having exactly 144 positions forced creative decisions
-   - Limitations can breed creativity
-
-4. **User Experience Details**
-   - Tooltips make exploration fun
-   - Click interactions add depth
-   - Little touches matter
-
-## The Uncomfortable Truth
-
-This project isn't necessary. Nobody needs a clock made of 144 clocks. But that's not really the point.
-
-Sometimes you build things to see if you can. Sometimes you explore an idea because it's interesting. The process of figuring out how to make something work can be more valuable than the end result itself.
-
-## If You Want to Build Something Similar
-
-Here's my advice:
-
-1. **Start with one unit** - Get a single clock working before managing 144 of them
-2. **Plan your data structure** - Figure out how to represent digits before coding
-3. **Test with simple cases** - Make sure basic digits work before trying all ten
-4. **Add features incrementally** - The world clock came later, not in the first version
-5. **Embrace experimentation** - Don't be afraid to try something different
-
-## Final Thoughts
-
-This isn't the most practical project I've built, but it taught me a lot about animations, time zones, React performance, and grid layouts.
-
-Sometimes the best learning comes from building things that don't need to exist.
+**Try it yourself**: Click on any clock to see what time it is in that city. Watch how all 144 clocks work together to tell you the time, each one simultaneously serving its own purpose and contributing to the larger display.
 
 </div>
